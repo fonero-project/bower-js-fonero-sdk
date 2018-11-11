@@ -1,13 +1,13 @@
 {
-  "name": "stellar-sdk",
-  "homepage": "https://github.com/stellar/bower-js-stellar-sdk",
+  "name": "fonero-sdk",
+  "homepage": "https://github.com/fonero-project/bower-js-fonero-sdk",
   "authors": [
-    "Stellar Development Foundation"
+    "Fonero Development Foundation"
   ],
-  "description": "Main Stellar client library for the Javascript language",
-  "main": "./stellar-sdk.min.js",
+  "description": "Main Fonero client library for the Javascript language",
+  "main": "./fonero-sdk.min.js",
   "keywords": [
-    "stellar"
+    "fonero"
   ],
   "license": "Apache 2.0"
 }

@@ -3,7 +3,7 @@
  * Available under MIT License (MIT)
  * https://github.com/Yaffle/EventSource/
  */
-!function(a){"use strict";function b(a){this.withCredentials=!1,this.responseType="",this.readyState=0,this.status=0,this.statusText="",this.responseText="",this.onprogress=p,this.onreadystatechange=p,this._contentType="",this._xhr=a,this._sendTimeout=0,this._abort=p}function c(a){this._xhr=new b(a)}function d(){this._listeners=Object.create(null)}function e(a){j(function(){throw a},0)}function f(a){this.type=a,this.target=void 0}function g(a,b){f.call(this,a),this.data=b.data,this.lastEventId=b.lastEventId}function h(a,b){d.call(this),this.onopen=void 0,this.onmessage=void 0,this.onerror=void 0,this.url=void 0,this.readyState=void 0,this.withCredentials=void 0,this._close=void 0,i(this,a,b)}function i(a,b,d){b=String(b);var h=void 0!=d&&Boolean(d.withCredentials),i=D(1e3),n=D(45e3),o="",p=i,A=!1,B=void 0!=d&&void 0!=d.headers?JSON.parse(JSON.stringify(d.headers)):void 0,F=void 0!=d&&void 0!=d.Transport?d.Transport:void 0!=m?m:l,G=new c(new F),H=0,I=q,J="",K="",L="",M="",N=v,O=0,P=0,Q=function(b,c,d){if(I===r)if(200===b&&void 0!=d&&z.test(d)){I=s,A=!0,p=i,a.readyState=s;var g=new f("open");a.dispatchEvent(g),E(a,a.onopen,g)}else{var h="";200!==b?(c&&(c=c.replace(/\s+/g," ")),h="EventSource's response has a status "+b+" "+c+" that is not 200. Aborting the connection."):h="EventSource's response has a Content-Type specifying an unsupported type: "+(void 0==d?"-":d.replace(/\s+/g," "))+". Aborting the connection.",e(new Error(h)),T();var g=new f("error");a.dispatchEvent(g),E(a,a.onerror,g)}},R=function(b){if(I===s){for(var c=-1,d=0;d<b.length;d+=1){var e=b.charCodeAt(d);(e==="\n".charCodeAt(0)||e==="\r".charCodeAt(0))&&(c=d)}var f=(-1!==c?M:"")+b.slice(0,c+1);M=(-1===c?M:"")+b.slice(c+1),""!==f&&(A=!0);for(var h=0;h<f.length;h+=1){var e=f.charCodeAt(h);if(N===u&&e==="\n".charCodeAt(0))N=v;else if(N===u&&(N=v),e==="\r".charCodeAt(0)||e==="\n".charCodeAt(0)){if(N!==v){N===w&&(P=h+1);var l=f.slice(O,P-1),m=f.slice(P+(h>P&&f.charCodeAt(P)===" ".charCodeAt(0)?1:0),h);"data"===l?(J+="\n",J+=m):"id"===l?K=m:"event"===l?L=m:"retry"===l?(i=C(m,i),p=i):"heartbeatTimeout"===l&&(n=C(m,n),0!==H&&(k(H),H=j(function(){U()},n)))}if(N===v){if(""!==J){o=K,""===L&&(L="message");var q=new g(L,{data:J.slice(1),lastEventId:K});if(a.dispatchEvent(q),"message"===L&&E(a,a.onmessage,q),I===t)return}J="",L=""}N=e==="\r".charCodeAt(0)?u:v}else N===v&&(O=h,N=w),N===w?e===":".charCodeAt(0)&&(P=h+1,N=x):N===x&&(N=y)}}},S=function(){if(I===s||I===r){I=q,0!==H&&(k(H),H=0),H=j(function(){U()},p),p=D(Math.min(16*i,2*p)),a.readyState=r;var b=new f("error");a.dispatchEvent(b),E(a,a.onerror,b)}},T=function(){I=t,G.cancel(),0!==H&&(k(H),H=0),a.readyState=t},U=function(){if(H=0,I!==q)return void(A?(A=!1,H=j(function(){U()},n)):(e(new Error("No activity within "+n+" milliseconds. Reconnecting.")),G.cancel()));A=!1,H=j(function(){U()},n),I=r,J="",L="",K=o,M="",O=0,P=0,N=v;var a=b;"data:"!==b.slice(0,5)&&"blob:"!==b.slice(0,5)&&(a=b+(-1===b.indexOf("?",0)?"?":"&")+"lastEventId="+encodeURIComponent(o));var c={};if(c.Accept="text/event-stream",void 0!=B)for(var d in B)Object.prototype.hasOwnProperty.call(B,d)&&(c[d]=B[d]);try{G.open(Q,R,S,a,h,c)}catch(f){throw T(),f}};a.url=b,a.readyState=r,a.withCredentials=h,a._close=T,U()}var j=a.setTimeout,k=a.clearTimeout,l=a.XMLHttpRequest,m=a.XDomainRequest,n=a.EventSource,o=a.document;null==Object.create&&(Object.create=function(a){function b(){}return b.prototype=a,new b});var p=function(){};b.prototype.open=function(a,b){this._abort(!0);var c=this,d=this._xhr,e=1,f=0;this._abort=function(a){0!==c._sendTimeout&&(k(c._sendTimeout),c._sendTimeout=0),(1===e||2===e||3===e)&&(e=4,d.onload=p,d.onerror=p,d.onabort=p,d.onprogress=p,d.onreadystatechange=p,d.abort(),0!==f&&(k(f),f=0),a||(c.readyState=4,c.onreadystatechange())),e=0};var g=function(){if(1===e){var a=0,b="",f=void 0;if("contentType"in d)a=200,b="OK",f=d.contentType;else try{a=d.status,b=d.statusText,f=d.getResponseHeader("Content-Type")}catch(g){a=0,b="",f=void 0}0!==a&&(e=2,c.readyState=2,c.status=a,c.statusText=b,c._contentType=f,c.onreadystatechange())}},h=function(){if(g(),2===e||3===e){e=3;var a="";try{a=d.responseText}catch(b){}c.readyState=3,c.responseText=a,c.onprogress()}},i=function(){h(),(1===e||2===e||3===e)&&(e=4,0!==f&&(k(f),f=0),c.readyState=4,c.onreadystatechange())},m=function(){void 0!=d&&(4===d.readyState?i():3===d.readyState?h():2===d.readyState&&g())},n=function(){f=j(function(){n()},500),3===d.readyState&&h()};d.onload=i,d.onerror=i,d.onabort=i,"sendAsBinary"in l.prototype||"mozAnon"in l.prototype||(d.onprogress=h),d.onreadystatechange=m,"contentType"in d&&(b+=(-1===b.indexOf("?",0)?"?":"&")+"padding=true"),d.open(a,b,!0),"readyState"in d&&(f=j(function(){n()},0))},b.prototype.abort=function(){this._abort(!1)},b.prototype.getResponseHeader=function(a){return this._contentType},b.prototype.setRequestHeader=function(a,b){var c=this._xhr;"setRequestHeader"in c&&c.setRequestHeader(a,b)},b.prototype.send=function(){if(!("ontimeout"in l.prototype)&&void 0!=o&&void 0!=o.readyState&&"complete"!==o.readyState){var a=this;return void(a._sendTimeout=j(function(){a._sendTimeout=0,a.send()},4))}var b=this._xhr;b.withCredentials=this.withCredentials,b.responseType=this.responseType;try{b.send(void 0)}catch(c){throw c}},c.prototype.open=function(a,b,c,d,e,f){var g=this._xhr;g.open("GET",d);var h=0;g.onprogress=function(){var a=g.responseText,c=a.slice(h);h+=c.length,b(c)},g.onreadystatechange=function(){if(2===g.readyState){var b=g.status,d=g.statusText,e=g.getResponseHeader("Content-Type");a(b,d,e)}else 4===g.readyState&&c()},g.withCredentials=e,g.responseType="text";for(var i in f)Object.prototype.hasOwnProperty.call(f,i)&&g.setRequestHeader(i,f[i]);g.send()},c.prototype.cancel=function(){var a=this._xhr;a.abort()},d.prototype.dispatchEvent=function(a){a.target=this;var b=this._listeners[a.type];if(void 0!=b)for(var c=b.length,d=0;c>d;d+=1){var f=b[d];try{"function"==typeof f.handleEvent?f.handleEvent(a):f.call(this,a)}catch(g){e(g)}}},d.prototype.addEventListener=function(a,b){a=String(a);var c=this._listeners,d=c[a];void 0==d&&(d=[],c[a]=d);for(var e=!1,f=0;f<d.length;f+=1)d[f]===b&&(e=!0);e||d.push(b)},d.prototype.removeEventListener=function(a,b){a=String(a);var c=this._listeners,d=c[a];if(void 0!=d){for(var e=[],f=0;f<d.length;f+=1)d[f]!==b&&e.push(d[f]);0===e.length?delete c[a]:c[a]=e}},g.prototype=Object.create(f.prototype);var q=-1,r=0,s=1,t=2,u=-1,v=0,w=1,x=2,y=3,z=/^text\/event\-stream;?(\s*charset\=utf\-8)?$/i,A=1e3,B=18e6,C=function(a,b){var c=parseInt(a,10);return c!==c&&(c=b),D(c)},D=function(a){return Math.min(Math.max(a,A),B)},E=function(a,b,c){try{"function"==typeof b&&b.call(a,c)}catch(d){e(d)}};h.prototype=Object.create(d.prototype),h.prototype.CONNECTING=r,h.prototype.OPEN=s,h.prototype.CLOSED=t,h.prototype.close=function(){this._close()},h.CONNECTING=r,h.OPEN=s,h.CLOSED=t,h.prototype.withCredentials=void 0,a.EventSourcePolyfill=h,a.NativeEventSource=n,void 0==l||void 0!=n&&"withCredentials"in n.prototype||(a.EventSource=h)}("undefined"!=typeof window?window:this);var StellarSdk =
+!function(a){"use strict";function b(a){this.withCredentials=!1,this.responseType="",this.readyState=0,this.status=0,this.statusText="",this.responseText="",this.onprogress=p,this.onreadystatechange=p,this._contentType="",this._xhr=a,this._sendTimeout=0,this._abort=p}function c(a){this._xhr=new b(a)}function d(){this._listeners=Object.create(null)}function e(a){j(function(){throw a},0)}function f(a){this.type=a,this.target=void 0}function g(a,b){f.call(this,a),this.data=b.data,this.lastEventId=b.lastEventId}function h(a,b){d.call(this),this.onopen=void 0,this.onmessage=void 0,this.onerror=void 0,this.url=void 0,this.readyState=void 0,this.withCredentials=void 0,this._close=void 0,i(this,a,b)}function i(a,b,d){b=String(b);var h=void 0!=d&&Boolean(d.withCredentials),i=D(1e3),n=D(45e3),o="",p=i,A=!1,B=void 0!=d&&void 0!=d.headers?JSON.parse(JSON.stringify(d.headers)):void 0,F=void 0!=d&&void 0!=d.Transport?d.Transport:void 0!=m?m:l,G=new c(new F),H=0,I=q,J="",K="",L="",M="",N=v,O=0,P=0,Q=function(b,c,d){if(I===r)if(200===b&&void 0!=d&&z.test(d)){I=s,A=!0,p=i,a.readyState=s;var g=new f("open");a.dispatchEvent(g),E(a,a.onopen,g)}else{var h="";200!==b?(c&&(c=c.replace(/\s+/g," ")),h="EventSource's response has a status "+b+" "+c+" that is not 200. Aborting the connection."):h="EventSource's response has a Content-Type specifying an unsupported type: "+(void 0==d?"-":d.replace(/\s+/g," "))+". Aborting the connection.",e(new Error(h)),T();var g=new f("error");a.dispatchEvent(g),E(a,a.onerror,g)}},R=function(b){if(I===s){for(var c=-1,d=0;d<b.length;d+=1){var e=b.charCodeAt(d);(e==="\n".charCodeAt(0)||e==="\r".charCodeAt(0))&&(c=d)}var f=(-1!==c?M:"")+b.slice(0,c+1);M=(-1===c?M:"")+b.slice(c+1),""!==f&&(A=!0);for(var h=0;h<f.length;h+=1){var e=f.charCodeAt(h);if(N===u&&e==="\n".charCodeAt(0))N=v;else if(N===u&&(N=v),e==="\r".charCodeAt(0)||e==="\n".charCodeAt(0)){if(N!==v){N===w&&(P=h+1);var l=f.slice(O,P-1),m=f.slice(P+(h>P&&f.charCodeAt(P)===" ".charCodeAt(0)?1:0),h);"data"===l?(J+="\n",J+=m):"id"===l?K=m:"event"===l?L=m:"retry"===l?(i=C(m,i),p=i):"heartbeatTimeout"===l&&(n=C(m,n),0!==H&&(k(H),H=j(function(){U()},n)))}if(N===v){if(""!==J){o=K,""===L&&(L="message");var q=new g(L,{data:J.slice(1),lastEventId:K});if(a.dispatchEvent(q),"message"===L&&E(a,a.onmessage,q),I===t)return}J="",L=""}N=e==="\r".charCodeAt(0)?u:v}else N===v&&(O=h,N=w),N===w?e===":".charCodeAt(0)&&(P=h+1,N=x):N===x&&(N=y)}}},S=function(){if(I===s||I===r){I=q,0!==H&&(k(H),H=0),H=j(function(){U()},p),p=D(Math.min(16*i,2*p)),a.readyState=r;var b=new f("error");a.dispatchEvent(b),E(a,a.onerror,b)}},T=function(){I=t,G.cancel(),0!==H&&(k(H),H=0),a.readyState=t},U=function(){if(H=0,I!==q)return void(A?(A=!1,H=j(function(){U()},n)):(e(new Error("No activity within "+n+" milliseconds. Reconnecting.")),G.cancel()));A=!1,H=j(function(){U()},n),I=r,J="",L="",K=o,M="",O=0,P=0,N=v;var a=b;"data:"!==b.slice(0,5)&&"blob:"!==b.slice(0,5)&&(a=b+(-1===b.indexOf("?",0)?"?":"&")+"lastEventId="+encodeURIComponent(o));var c={};if(c.Accept="text/event-stream",void 0!=B)for(var d in B)Object.prototype.hasOwnProperty.call(B,d)&&(c[d]=B[d]);try{G.open(Q,R,S,a,h,c)}catch(f){throw T(),f}};a.url=b,a.readyState=r,a.withCredentials=h,a._close=T,U()}var j=a.setTimeout,k=a.clearTimeout,l=a.XMLHttpRequest,m=a.XDomainRequest,n=a.EventSource,o=a.document;null==Object.create&&(Object.create=function(a){function b(){}return b.prototype=a,new b});var p=function(){};b.prototype.open=function(a,b){this._abort(!0);var c=this,d=this._xhr,e=1,f=0;this._abort=function(a){0!==c._sendTimeout&&(k(c._sendTimeout),c._sendTimeout=0),(1===e||2===e||3===e)&&(e=4,d.onload=p,d.onerror=p,d.onabort=p,d.onprogress=p,d.onreadystatechange=p,d.abort(),0!==f&&(k(f),f=0),a||(c.readyState=4,c.onreadystatechange())),e=0};var g=function(){if(1===e){var a=0,b="",f=void 0;if("contentType"in d)a=200,b="OK",f=d.contentType;else try{a=d.status,b=d.statusText,f=d.getResponseHeader("Content-Type")}catch(g){a=0,b="",f=void 0}0!==a&&(e=2,c.readyState=2,c.status=a,c.statusText=b,c._contentType=f,c.onreadystatechange())}},h=function(){if(g(),2===e||3===e){e=3;var a="";try{a=d.responseText}catch(b){}c.readyState=3,c.responseText=a,c.onprogress()}},i=function(){h(),(1===e||2===e||3===e)&&(e=4,0!==f&&(k(f),f=0),c.readyState=4,c.onreadystatechange())},m=function(){void 0!=d&&(4===d.readyState?i():3===d.readyState?h():2===d.readyState&&g())},n=function(){f=j(function(){n()},500),3===d.readyState&&h()};d.onload=i,d.onerror=i,d.onabort=i,"sendAsBinary"in l.prototype||"mozAnon"in l.prototype||(d.onprogress=h),d.onreadystatechange=m,"contentType"in d&&(b+=(-1===b.indexOf("?",0)?"?":"&")+"padding=true"),d.open(a,b,!0),"readyState"in d&&(f=j(function(){n()},0))},b.prototype.abort=function(){this._abort(!1)},b.prototype.getResponseHeader=function(a){return this._contentType},b.prototype.setRequestHeader=function(a,b){var c=this._xhr;"setRequestHeader"in c&&c.setRequestHeader(a,b)},b.prototype.send=function(){if(!("ontimeout"in l.prototype)&&void 0!=o&&void 0!=o.readyState&&"complete"!==o.readyState){var a=this;return void(a._sendTimeout=j(function(){a._sendTimeout=0,a.send()},4))}var b=this._xhr;b.withCredentials=this.withCredentials,b.responseType=this.responseType;try{b.send(void 0)}catch(c){throw c}},c.prototype.open=function(a,b,c,d,e,f){var g=this._xhr;g.open("GET",d);var h=0;g.onprogress=function(){var a=g.responseText,c=a.slice(h);h+=c.length,b(c)},g.onreadystatechange=function(){if(2===g.readyState){var b=g.status,d=g.statusText,e=g.getResponseHeader("Content-Type");a(b,d,e)}else 4===g.readyState&&c()},g.withCredentials=e,g.responseType="text";for(var i in f)Object.prototype.hasOwnProperty.call(f,i)&&g.setRequestHeader(i,f[i]);g.send()},c.prototype.cancel=function(){var a=this._xhr;a.abort()},d.prototype.dispatchEvent=function(a){a.target=this;var b=this._listeners[a.type];if(void 0!=b)for(var c=b.length,d=0;c>d;d+=1){var f=b[d];try{"function"==typeof f.handleEvent?f.handleEvent(a):f.call(this,a)}catch(g){e(g)}}},d.prototype.addEventListener=function(a,b){a=String(a);var c=this._listeners,d=c[a];void 0==d&&(d=[],c[a]=d);for(var e=!1,f=0;f<d.length;f+=1)d[f]===b&&(e=!0);e||d.push(b)},d.prototype.removeEventListener=function(a,b){a=String(a);var c=this._listeners,d=c[a];if(void 0!=d){for(var e=[],f=0;f<d.length;f+=1)d[f]!==b&&e.push(d[f]);0===e.length?delete c[a]:c[a]=e}},g.prototype=Object.create(f.prototype);var q=-1,r=0,s=1,t=2,u=-1,v=0,w=1,x=2,y=3,z=/^text\/event\-stream;?(\s*charset\=utf\-8)?$/i,A=1e3,B=18e6,C=function(a,b){var c=parseInt(a,10);return c!==c&&(c=b),D(c)},D=function(a){return Math.min(Math.max(a,A),B)},E=function(a,b,c){try{"function"==typeof b&&b.call(a,c)}catch(d){e(d)}};h.prototype=Object.create(d.prototype),h.prototype.CONNECTING=r,h.prototype.OPEN=s,h.prototype.CLOSED=t,h.prototype.close=function(){this._close()},h.CONNECTING=r,h.OPEN=s,h.CLOSED=t,h.prototype.withCredentials=void 0,a.EventSourcePolyfill=h,a.NativeEventSource=n,void 0==l||void 0!=n&&"withCredentials"in n.prototype||(a.EventSource=h)}("undefined"!=typeof window?window:this);var FoneroSdk =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -54,7 +54,7 @@
 
 	module.exports = __webpack_require__(1);
 	module.exports.axios = __webpack_require__(129);
-	module.exports.StellarBase = __webpack_require__(203);
+	module.exports.FoneroBase = __webpack_require__(203);
 
 /***/ }),
 /* 1 */
@@ -111,38 +111,38 @@
 	  }
 	});
 
-	var _stellar_toml_resolver = __webpack_require__(428);
+	var _fonero_toml_resolver = __webpack_require__(428);
 
-	Object.defineProperty(exports, "StellarTomlResolver", {
+	Object.defineProperty(exports, "FoneroTomlResolver", {
 	  enumerable: true,
 	  get: function get() {
-	    return _stellar_toml_resolver.StellarTomlResolver;
+	    return _fonero_toml_resolver.FoneroTomlResolver;
 	  }
 	});
-	Object.defineProperty(exports, "STELLAR_TOML_MAX_SIZE", {
+	Object.defineProperty(exports, "FONERO_TOML_MAX_SIZE", {
 	  enumerable: true,
 	  get: function get() {
-	    return _stellar_toml_resolver.STELLAR_TOML_MAX_SIZE;
+	    return _fonero_toml_resolver.FONERO_TOML_MAX_SIZE;
 	  }
 	});
 
-	var _stellarBase = __webpack_require__(203);
+	var _foneroBase = __webpack_require__(203);
 
-	Object.keys(_stellarBase).forEach(function (key) {
+	Object.keys(_foneroBase).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
 	  Object.defineProperty(exports, key, {
 	    enumerable: true,
 	    get: function get() {
-	      return _stellarBase[key];
+	      return _foneroBase[key];
 	    }
 	  });
 	});
 	__webpack_require__(432).polyfill();
 
-	// stellar-sdk classes to expose
+	// fonero-sdk classes to expose
 
 
-	// expose classes and functions from stellar-base
+	// expose classes and functions from fonero-base
 	exports.default = module.exports;
 
 /***/ }),
@@ -289,15 +289,15 @@
 	 *
 	 * Usage node:
 	 * ```
-	 * import {Config} from 'stellar-sdk';
+	 * import {Config} from 'fonero-sdk';
 	 * Config.setAllowHttp(true);
 	 * Config.setTimout(5000);
 	 * ```
 	 *
 	 * Usage browser:
 	 * ```
-	 * StellarSdk.Config.setAllowHttp(true);
-	 * StellarSdk.Config.setTimout(5000);
+	 * FoneroSdk.Config.setAllowHttp(true);
+	 * FoneroSdk.Config.setTimout(5000);
 	 * ```
 	 * @static
 	 */
@@ -3730,7 +3730,7 @@
 
 	var _trade_aggregation_call_builder = __webpack_require__(426);
 
-	var _stellarBase = __webpack_require__(203);
+	var _foneroBase = __webpack_require__(203);
 
 	var _isString = __webpack_require__(275);
 
@@ -3747,10 +3747,10 @@
 	var SUBMIT_TRANSACTION_TIMEOUT = exports.SUBMIT_TRANSACTION_TIMEOUT = 60 * 1000;
 
 	/**
-	 * Server handles the network connection to a [Horizon](https://www.stellar.org/developers/horizon/learn/index.html)
+	 * Server handles the network connection to a [Horizon](https://www.fonero.org/developers/horizon/learn/index.html)
 	 * instance and exposes an interface for requests to that instance.
 	 * @constructor
-	 * @param {string} serverURL Horizon Server URL (ex. `https://horizon-testnet.stellar.org`).
+	 * @param {string} serverURL Horizon Server URL (ex. `https://horizon-testnet.fonero.org`).
 	 * @param {object} [opts]
 	 * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments! You can also use {@link Config} class to set this globally.
 	 */
@@ -3775,7 +3775,7 @@
 
 	    /**
 	     * Submits a transaction to the network.
-	     * @see [Post Transaction](https://www.stellar.org/developers/horizon/reference/transactions-create.html)
+	     * @see [Post Transaction](https://www.fonero.org/developers/horizon/reference/transactions-create.html)
 	     * @param {Transaction} transaction - The transaction to submit.
 	     * @returns {Promise} Promise that resolves or rejects with response from horizon.
 	     */
@@ -3830,7 +3830,7 @@
 	        }
 
 	        /**
-	         * People on the Stellar network can make offers to buy or sell assets. This endpoint represents all the offers a particular account makes.
+	         * People on the Fonero network can make offers to buy or sell assets. This endpoint represents all the offers a particular account makes.
 	         * Currently this method only supports querying offers for account and should be used like this:
 	         * ```
 	         * server.offers('accounts', accountId).call()
@@ -3889,7 +3889,7 @@
 	        }
 
 	        /**
-	         * The Stellar Network allows payments to be made between assets through path payments. A path payment specifies a
+	         * The Fonero Network allows payments to be made between assets through path payments. A path payment specifies a
 	         * series of assets to route a payment through, from source asset (the asset debited from the payer) to destination
 	         * asset (the asset credited to the payee).
 	         *
@@ -4023,7 +4023,7 @@
 	 * Creates a new {@link AccountCallBuilder} pointed to server defined by serverUrl.
 	 * Do not create this object directly, use {@link Server#accounts}.
 	 *
-	 * @see [All Accounts](https://www.stellar.org/developers/horizon/reference/accounts-all.html)
+	 * @see [All Accounts](https://www.fonero.org/developers/horizon/reference/accounts-all.html)
 	 * @class AccountCallBuilder
 	 * @extends CallBuilder
 	 * @constructor
@@ -4046,7 +4046,7 @@
 	   * Returns information and links relating to a single account.
 	   * The balances section in the returned JSON will also list all the trust lines this account has set up.
 	   *
-	   * @see [Account Details](https://www.stellar.org/developers/horizon/reference/accounts-single.html)
+	   * @see [Account Details](https://www.fonero.org/developers/horizon/reference/accounts-single.html)
 	   * @param {string} id For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
 	   * @returns {AccountCallBuilder}
 	   */
@@ -4148,7 +4148,7 @@
 	    /**
 	     * Creates an EventSource that listens for incoming messages from the server. To stop listening for new
 	     * events call the function returned by this method.
-	     * @see [Horizon Response Format](https://www.stellar.org/developers/horizon/learn/responses.html)
+	     * @see [Horizon Response Format](https://www.fonero.org/developers/horizon/learn/responses.html)
 	     * @see [MDN EventSource](https://developer.mozilla.org/en-US/docs/Web/API/EventSource)
 	     * @param {object} [options] EventSource options.
 	     * @param {function} [options.onmessage] Callback function to handle incoming messages.
@@ -4276,7 +4276,6 @@
 	        url = url.protocol(this.url.protocol());
 	      }
 
-	      // Temp fix for: https://github.com/stellar/js-stellar-sdk/issues/15
 	      url.setQuery('c', Math.random());
 	      return axios.get(url.toString()).then(function (response) {
 	        return response.data;
@@ -4345,7 +4344,7 @@
 
 	    /**
 	     * Sets `cursor` parameter for the current call. Returns the CallBuilder object on which this method has been called.
-	     * @see [Paging](https://www.stellar.org/developers/horizon/learn/paging.html)
+	     * @see [Paging](https://www.fonero.org/developers/horizon/learn/paging.html)
 	     * @param {string} cursor A cursor is a value that points to a specific location in a collection of resources.
 	     */
 
@@ -4358,7 +4357,7 @@
 
 	    /**
 	     * Sets `limit` parameter for the current call. Returns the CallBuilder object on which this method has been called.
-	     * @see [Paging](https://www.stellar.org/developers/horizon/learn/paging.html)
+	     * @see [Paging](https://www.fonero.org/developers/horizon/learn/paging.html)
 	     * @param {number} number Number of records the server should return.
 	     */
 
@@ -19867,7 +19866,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _stellarBase = __webpack_require__(203);
+	var _foneroBase = __webpack_require__(203);
 
 	var _forIn = __webpack_require__(414);
 
@@ -19884,7 +19883,7 @@
 	 * The balances section in the returned JSON will also list all the trust lines this account has set up.
 	 * It also contains {@link Account} object and exposes it's methods so can be used in {@link TransactionBuilder}.
 	 *
-	 * @see [Account Details](https://www.stellar.org/developers/horizon/reference/accounts-single.html)
+	 * @see [Account Details](https://www.fonero.org/developers/horizon/reference/accounts-single.html)
 	 * @param {string} response Response from horizon account endpoint.
 	 * @returns {AccountResponse}
 	 */
@@ -19894,7 +19893,7 @@
 
 	        _classCallCheck(this, AccountResponse);
 
-	        this._baseAccount = new _stellarBase.Account(response.account_id, response.sequence);
+	        this._baseAccount = new _foneroBase.Account(response.account_id, response.sequence);
 	        // Extract response fields
 	        (0, _forIn2.default)(response, function (value, key) {
 	            _this[key] = value;
@@ -19902,7 +19901,7 @@
 	    }
 
 	    /**
-	     * Returns Stellar account ID, ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`
+	     * Returns Fonero account ID, ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`
 	     * @returns {string}
 	     */
 
@@ -19996,7 +19995,7 @@
 /* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";var _interopRequireWildcard=function(obj){return obj && obj.__esModule?obj:{"default":obj};};var XDR=_interopRequireWildcard(__webpack_require__(205));var types=XDR.config(function(xdr){xdr.typedef("Value", xdr.varOpaque());xdr.struct("ScpBallot", [["counter", xdr.lookup("Uint32")], ["value", xdr.lookup("Value")]]);xdr["enum"]("ScpStatementType", {scpStPrepare:0, scpStConfirm:1, scpStExternalize:2, scpStNominate:3});xdr.struct("ScpNomination", [["quorumSetHash", xdr.lookup("Hash")], ["votes", xdr.varArray(xdr.lookup("Value"), 2147483647)], ["accepted", xdr.varArray(xdr.lookup("Value"), 2147483647)]]);xdr.struct("ScpStatementPrepare", [["quorumSetHash", xdr.lookup("Hash")], ["ballot", xdr.lookup("ScpBallot")], ["prepared", xdr.option(xdr.lookup("ScpBallot"))], ["preparedPrime", xdr.option(xdr.lookup("ScpBallot"))], ["nC", xdr.lookup("Uint32")], ["nH", xdr.lookup("Uint32")]]);xdr.struct("ScpStatementConfirm", [["ballot", xdr.lookup("ScpBallot")], ["nPrepared", xdr.lookup("Uint32")], ["nCommit", xdr.lookup("Uint32")], ["nH", xdr.lookup("Uint32")], ["quorumSetHash", xdr.lookup("Hash")]]);xdr.struct("ScpStatementExternalize", [["commit", xdr.lookup("ScpBallot")], ["nH", xdr.lookup("Uint32")], ["commitQuorumSetHash", xdr.lookup("Hash")]]);xdr.union("ScpStatementPledges", {switchOn:xdr.lookup("ScpStatementType"), switchName:"type", switches:[["scpStPrepare", "prepare"], ["scpStConfirm", "confirm"], ["scpStExternalize", "externalize"], ["scpStNominate", "nominate"]], arms:{prepare:xdr.lookup("ScpStatementPrepare"), confirm:xdr.lookup("ScpStatementConfirm"), externalize:xdr.lookup("ScpStatementExternalize"), nominate:xdr.lookup("ScpNomination")}});xdr.struct("ScpStatement", [["nodeId", xdr.lookup("NodeId")], ["slotIndex", xdr.lookup("Uint64")], ["pledges", xdr.lookup("ScpStatementPledges")]]);xdr.struct("ScpEnvelope", [["statement", xdr.lookup("ScpStatement")], ["signature", xdr.lookup("Signature")]]);xdr.struct("ScpQuorumSet", [["threshold", xdr.lookup("Uint32")], ["validators", xdr.varArray(xdr.lookup("PublicKey"), 2147483647)], ["innerSets", xdr.varArray(xdr.lookup("ScpQuorumSet"), 2147483647)]]);xdr.typedef("AccountId", xdr.lookup("PublicKey"));xdr.typedef("Thresholds", xdr.opaque(4));xdr.typedef("String32", xdr.string(32));xdr.typedef("String64", xdr.string(64));xdr.typedef("SequenceNumber", xdr.lookup("Int64"));xdr.typedef("DataValue", xdr.varOpaque(64));xdr["enum"]("AssetType", {assetTypeNative:0, assetTypeCreditAlphanum4:1, assetTypeCreditAlphanum12:2});xdr.struct("AssetAlphaNum4", [["assetCode", xdr.opaque(4)], ["issuer", xdr.lookup("AccountId")]]);xdr.struct("AssetAlphaNum12", [["assetCode", xdr.opaque(12)], ["issuer", xdr.lookup("AccountId")]]);xdr.union("Asset", {switchOn:xdr.lookup("AssetType"), switchName:"type", switches:[["assetTypeNative", xdr["void"]()], ["assetTypeCreditAlphanum4", "alphaNum4"], ["assetTypeCreditAlphanum12", "alphaNum12"]], arms:{alphaNum4:xdr.lookup("AssetAlphaNum4"), alphaNum12:xdr.lookup("AssetAlphaNum12")}});xdr.struct("Price", [["n", xdr.lookup("Int32")], ["d", xdr.lookup("Int32")]]);xdr.struct("Liabilities", [["buying", xdr.lookup("Int64")], ["selling", xdr.lookup("Int64")]]);xdr["enum"]("ThresholdIndices", {thresholdMasterWeight:0, thresholdLow:1, thresholdMed:2, thresholdHigh:3});xdr["enum"]("LedgerEntryType", {account:0, trustline:1, offer:2, datum:3});xdr.struct("Signer", [["key", xdr.lookup("SignerKey")], ["weight", xdr.lookup("Uint32")]]);xdr["enum"]("AccountFlags", {authRequiredFlag:1, authRevocableFlag:2, authImmutableFlag:4});xdr["const"]("MASK_ACCOUNT_FLAGS", 7);xdr.union("AccountEntryV1Ext", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("AccountEntryV1", [["liabilities", xdr.lookup("Liabilities")], ["ext", xdr.lookup("AccountEntryV1Ext")]]);xdr.union("AccountEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()], [1, "v1"]], arms:{v1:xdr.lookup("AccountEntryV1")}});xdr.struct("AccountEntry", [["accountId", xdr.lookup("AccountId")], ["balance", xdr.lookup("Int64")], ["seqNum", xdr.lookup("SequenceNumber")], ["numSubEntries", xdr.lookup("Uint32")], ["inflationDest", xdr.option(xdr.lookup("AccountId"))], ["flags", xdr.lookup("Uint32")], ["homeDomain", xdr.lookup("String32")], ["thresholds", xdr.lookup("Thresholds")], ["signers", xdr.varArray(xdr.lookup("Signer"), 20)], ["ext", xdr.lookup("AccountEntryExt")]]);xdr["enum"]("TrustLineFlags", {authorizedFlag:1});xdr["const"]("MASK_TRUSTLINE_FLAGS", 1);xdr.union("TrustLineEntryV1Ext", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("TrustLineEntryV1", [["liabilities", xdr.lookup("Liabilities")], ["ext", xdr.lookup("TrustLineEntryV1Ext")]]);xdr.union("TrustLineEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()], [1, "v1"]], arms:{v1:xdr.lookup("TrustLineEntryV1")}});xdr.struct("TrustLineEntry", [["accountId", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["balance", xdr.lookup("Int64")], ["limit", xdr.lookup("Int64")], ["flags", xdr.lookup("Uint32")], ["ext", xdr.lookup("TrustLineEntryExt")]]);xdr["enum"]("OfferEntryFlags", {passiveFlag:1});xdr["const"]("MASK_OFFERENTRY_FLAGS", 1);xdr.union("OfferEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("OfferEntry", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")], ["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")], ["flags", xdr.lookup("Uint32")], ["ext", xdr.lookup("OfferEntryExt")]]);xdr.union("DataEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("DataEntry", [["accountId", xdr.lookup("AccountId")], ["dataName", xdr.lookup("String64")], ["dataValue", xdr.lookup("DataValue")], ["ext", xdr.lookup("DataEntryExt")]]);xdr.union("LedgerEntryData", {switchOn:xdr.lookup("LedgerEntryType"), switchName:"type", switches:[["account", "account"], ["trustline", "trustLine"], ["offer", "offer"], ["datum", "data"]], arms:{account:xdr.lookup("AccountEntry"), trustLine:xdr.lookup("TrustLineEntry"), offer:xdr.lookup("OfferEntry"), data:xdr.lookup("DataEntry")}});xdr.union("LedgerEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("LedgerEntry", [["lastModifiedLedgerSeq", xdr.lookup("Uint32")], ["data", xdr.lookup("LedgerEntryData")], ["ext", xdr.lookup("LedgerEntryExt")]]);xdr["enum"]("EnvelopeType", {envelopeTypeScp:1, envelopeTypeTx:2, envelopeTypeAuth:3});xdr.typedef("UpgradeType", xdr.varOpaque(128));xdr.union("StellarValueExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("StellarValue", [["txSetHash", xdr.lookup("Hash")], ["closeTime", xdr.lookup("Uint64")], ["upgrades", xdr.varArray(xdr.lookup("UpgradeType"), 6)], ["ext", xdr.lookup("StellarValueExt")]]);xdr.union("LedgerHeaderExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("LedgerHeader", [["ledgerVersion", xdr.lookup("Uint32")], ["previousLedgerHash", xdr.lookup("Hash")], ["scpValue", xdr.lookup("StellarValue")], ["txSetResultHash", xdr.lookup("Hash")], ["bucketListHash", xdr.lookup("Hash")], ["ledgerSeq", xdr.lookup("Uint32")], ["totalCoins", xdr.lookup("Int64")], ["feePool", xdr.lookup("Int64")], ["inflationSeq", xdr.lookup("Uint32")], ["idPool", xdr.lookup("Uint64")], ["baseFee", xdr.lookup("Uint32")], ["baseReserve", xdr.lookup("Uint32")], ["maxTxSetSize", xdr.lookup("Uint32")], ["skipList", xdr.array(xdr.lookup("Hash"), 4)], ["ext", xdr.lookup("LedgerHeaderExt")]]);xdr["enum"]("LedgerUpgradeType", {ledgerUpgradeVersion:1, ledgerUpgradeBaseFee:2, ledgerUpgradeMaxTxSetSize:3, ledgerUpgradeBaseReserve:4});xdr.union("LedgerUpgrade", {switchOn:xdr.lookup("LedgerUpgradeType"), switchName:"type", switches:[["ledgerUpgradeVersion", "newLedgerVersion"], ["ledgerUpgradeBaseFee", "newBaseFee"], ["ledgerUpgradeMaxTxSetSize", "newMaxTxSetSize"], ["ledgerUpgradeBaseReserve", "newBaseReserve"]], arms:{newLedgerVersion:xdr.lookup("Uint32"), newBaseFee:xdr.lookup("Uint32"), newMaxTxSetSize:xdr.lookup("Uint32"), newBaseReserve:xdr.lookup("Uint32")}});xdr.struct("LedgerKeyAccount", [["accountId", xdr.lookup("AccountId")]]);xdr.struct("LedgerKeyTrustLine", [["accountId", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")]]);xdr.struct("LedgerKeyOffer", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")]]);xdr.struct("LedgerKeyData", [["accountId", xdr.lookup("AccountId")], ["dataName", xdr.lookup("String64")]]);xdr.union("LedgerKey", {switchOn:xdr.lookup("LedgerEntryType"), switchName:"type", switches:[["account", "account"], ["trustline", "trustLine"], ["offer", "offer"], ["datum", "data"]], arms:{account:xdr.lookup("LedgerKeyAccount"), trustLine:xdr.lookup("LedgerKeyTrustLine"), offer:xdr.lookup("LedgerKeyOffer"), data:xdr.lookup("LedgerKeyData")}});xdr["enum"]("BucketEntryType", {liveentry:0, deadentry:1});xdr.union("BucketEntry", {switchOn:xdr.lookup("BucketEntryType"), switchName:"type", switches:[["liveentry", "liveEntry"], ["deadentry", "deadEntry"]], arms:{liveEntry:xdr.lookup("LedgerEntry"), deadEntry:xdr.lookup("LedgerKey")}});xdr.struct("TransactionSet", [["previousLedgerHash", xdr.lookup("Hash")], ["txes", xdr.varArray(xdr.lookup("TransactionEnvelope"), 2147483647)]]);xdr.struct("TransactionResultPair", [["transactionHash", xdr.lookup("Hash")], ["result", xdr.lookup("TransactionResult")]]);xdr.struct("TransactionResultSet", [["results", xdr.varArray(xdr.lookup("TransactionResultPair"), 2147483647)]]);xdr.union("TransactionHistoryEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("TransactionHistoryEntry", [["ledgerSeq", xdr.lookup("Uint32")], ["txSet", xdr.lookup("TransactionSet")], ["ext", xdr.lookup("TransactionHistoryEntryExt")]]);xdr.union("TransactionHistoryResultEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("TransactionHistoryResultEntry", [["ledgerSeq", xdr.lookup("Uint32")], ["txResultSet", xdr.lookup("TransactionResultSet")], ["ext", xdr.lookup("TransactionHistoryResultEntryExt")]]);xdr.union("LedgerHeaderHistoryEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("LedgerHeaderHistoryEntry", [["hash", xdr.lookup("Hash")], ["header", xdr.lookup("LedgerHeader")], ["ext", xdr.lookup("LedgerHeaderHistoryEntryExt")]]);xdr.struct("LedgerScpMessages", [["ledgerSeq", xdr.lookup("Uint32")], ["messages", xdr.varArray(xdr.lookup("ScpEnvelope"), 2147483647)]]);xdr.struct("ScpHistoryEntryV0", [["quorumSets", xdr.varArray(xdr.lookup("ScpQuorumSet"), 2147483647)], ["ledgerMessages", xdr.lookup("LedgerScpMessages")]]);xdr.union("ScpHistoryEntry", {switchOn:xdr.int(), switchName:"v", switches:[[0, "v0"]], arms:{v0:xdr.lookup("ScpHistoryEntryV0")}});xdr["enum"]("LedgerEntryChangeType", {ledgerEntryCreated:0, ledgerEntryUpdated:1, ledgerEntryRemoved:2, ledgerEntryState:3});xdr.union("LedgerEntryChange", {switchOn:xdr.lookup("LedgerEntryChangeType"), switchName:"type", switches:[["ledgerEntryCreated", "created"], ["ledgerEntryUpdated", "updated"], ["ledgerEntryRemoved", "removed"], ["ledgerEntryState", "state"]], arms:{created:xdr.lookup("LedgerEntry"), updated:xdr.lookup("LedgerEntry"), removed:xdr.lookup("LedgerKey"), state:xdr.lookup("LedgerEntry")}});xdr.typedef("LedgerEntryChanges", xdr.varArray(xdr.lookup("LedgerEntryChange"), 2147483647));xdr.struct("OperationMeta", [["changes", xdr.lookup("LedgerEntryChanges")]]);xdr.struct("TransactionMetaV1", [["txChanges", xdr.lookup("LedgerEntryChanges")], ["operations", xdr.varArray(xdr.lookup("OperationMeta"), 2147483647)]]);xdr.union("TransactionMeta", {switchOn:xdr.int(), switchName:"v", switches:[[0, "operations"], [1, "v1"]], arms:{operations:xdr.varArray(xdr.lookup("OperationMeta"), 2147483647), v1:xdr.lookup("TransactionMetaV1")}});xdr["enum"]("ErrorCode", {errMisc:0, errDatum:1, errConf:2, errAuth:3, errLoad:4});xdr.struct("Error", [["code", xdr.lookup("ErrorCode")], ["msg", xdr.string(100)]]);xdr.struct("AuthCert", [["pubkey", xdr.lookup("Curve25519Public")], ["expiration", xdr.lookup("Uint64")], ["sig", xdr.lookup("Signature")]]);xdr.struct("Hello", [["ledgerVersion", xdr.lookup("Uint32")], ["overlayVersion", xdr.lookup("Uint32")], ["overlayMinVersion", xdr.lookup("Uint32")], ["networkId", xdr.lookup("Hash")], ["versionStr", xdr.string(100)], ["listeningPort", xdr.int()], ["peerId", xdr.lookup("NodeId")], ["cert", xdr.lookup("AuthCert")], ["nonce", xdr.lookup("Uint256")]]);xdr.struct("Auth", [["unused", xdr.int()]]);xdr["enum"]("IpAddrType", {iPv4:0, iPv6:1});xdr.union("PeerAddressIp", {switchOn:xdr.lookup("IpAddrType"), switchName:"type", switches:[["iPv4", "ipv4"], ["iPv6", "ipv6"]], arms:{ipv4:xdr.opaque(4), ipv6:xdr.opaque(16)}});xdr.struct("PeerAddress", [["ip", xdr.lookup("PeerAddressIp")], ["port", xdr.lookup("Uint32")], ["numFailures", xdr.lookup("Uint32")]]);xdr["enum"]("MessageType", {errorMsg:0, auth:2, dontHave:3, getPeer:4, peer:5, getTxSet:6, txSet:7, transaction:8, getScpQuorumset:9, scpQuorumset:10, scpMessage:11, getScpState:12, hello:13});xdr.struct("DontHave", [["type", xdr.lookup("MessageType")], ["reqHash", xdr.lookup("Uint256")]]);xdr.union("StellarMessage", {switchOn:xdr.lookup("MessageType"), switchName:"type", switches:[["errorMsg", "error"], ["hello", "hello"], ["auth", "auth"], ["dontHave", "dontHave"], ["getPeer", xdr["void"]()], ["peer", "peers"], ["getTxSet", "txSetHash"], ["txSet", "txSet"], ["transaction", "transaction"], ["getScpQuorumset", "qSetHash"], ["scpQuorumset", "qSet"], ["scpMessage", "envelope"], ["getScpState", "getScpLedgerSeq"]], arms:{error:xdr.lookup("Error"), hello:xdr.lookup("Hello"), auth:xdr.lookup("Auth"), dontHave:xdr.lookup("DontHave"), peers:xdr.varArray(xdr.lookup("PeerAddress"), 100), txSetHash:xdr.lookup("Uint256"), txSet:xdr.lookup("TransactionSet"), transaction:xdr.lookup("TransactionEnvelope"), qSetHash:xdr.lookup("Uint256"), qSet:xdr.lookup("ScpQuorumSet"), envelope:xdr.lookup("StellarMessage"), getScpLedgerSeq:xdr.lookup("Uint32")}});xdr.struct("AuthenticatedMessageV0", [["sequence", xdr.lookup("Uint64")], ["message", xdr.lookup("StellarMessage")], ["mac", xdr.lookup("HmacSha256Mac")]]);xdr.union("AuthenticatedMessage", {switchOn:xdr.lookup("Uint32"), switchName:"v", switches:[[0, "v0"]], arms:{v0:xdr.lookup("AuthenticatedMessageV0")}});xdr.struct("DecoratedSignature", [["hint", xdr.lookup("SignatureHint")], ["signature", xdr.lookup("Signature")]]);xdr["enum"]("OperationType", {createAccount:0, payment:1, pathPayment:2, manageOffer:3, createPassiveOffer:4, setOption:5, changeTrust:6, allowTrust:7, accountMerge:8, inflation:9, manageDatum:10, bumpSequence:11});xdr.struct("CreateAccountOp", [["destination", xdr.lookup("AccountId")], ["startingBalance", xdr.lookup("Int64")]]);xdr.struct("PaymentOp", [["destination", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")]]);xdr.struct("PathPaymentOp", [["sendAsset", xdr.lookup("Asset")], ["sendMax", xdr.lookup("Int64")], ["destination", xdr.lookup("AccountId")], ["destAsset", xdr.lookup("Asset")], ["destAmount", xdr.lookup("Int64")], ["path", xdr.varArray(xdr.lookup("Asset"), 5)]]);xdr.struct("ManageOfferOp", [["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")], ["offerId", xdr.lookup("Uint64")]]);xdr.struct("CreatePassiveOfferOp", [["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")]]);xdr.struct("SetOptionsOp", [["inflationDest", xdr.option(xdr.lookup("AccountId"))], ["clearFlags", xdr.option(xdr.lookup("Uint32"))], ["setFlags", xdr.option(xdr.lookup("Uint32"))], ["masterWeight", xdr.option(xdr.lookup("Uint32"))], ["lowThreshold", xdr.option(xdr.lookup("Uint32"))], ["medThreshold", xdr.option(xdr.lookup("Uint32"))], ["highThreshold", xdr.option(xdr.lookup("Uint32"))], ["homeDomain", xdr.option(xdr.lookup("String32"))], ["signer", xdr.option(xdr.lookup("Signer"))]]);xdr.struct("ChangeTrustOp", [["line", xdr.lookup("Asset")], ["limit", xdr.lookup("Int64")]]);xdr.union("AllowTrustOpAsset", {switchOn:xdr.lookup("AssetType"), switchName:"type", switches:[["assetTypeCreditAlphanum4", "assetCode4"], ["assetTypeCreditAlphanum12", "assetCode12"]], arms:{assetCode4:xdr.opaque(4), assetCode12:xdr.opaque(12)}});xdr.struct("AllowTrustOp", [["trustor", xdr.lookup("AccountId")], ["asset", xdr.lookup("AllowTrustOpAsset")], ["authorize", xdr.bool()]]);xdr.struct("ManageDataOp", [["dataName", xdr.lookup("String64")], ["dataValue", xdr.option(xdr.lookup("DataValue"))]]);xdr.struct("BumpSequenceOp", [["bumpTo", xdr.lookup("SequenceNumber")]]);xdr.union("OperationBody", {switchOn:xdr.lookup("OperationType"), switchName:"type", switches:[["createAccount", "createAccountOp"], ["payment", "paymentOp"], ["pathPayment", "pathPaymentOp"], ["manageOffer", "manageOfferOp"], ["createPassiveOffer", "createPassiveOfferOp"], ["setOption", "setOptionsOp"], ["changeTrust", "changeTrustOp"], ["allowTrust", "allowTrustOp"], ["accountMerge", "destination"], ["inflation", xdr["void"]()], ["manageDatum", "manageDataOp"], ["bumpSequence", "bumpSequenceOp"]], arms:{createAccountOp:xdr.lookup("CreateAccountOp"), paymentOp:xdr.lookup("PaymentOp"), pathPaymentOp:xdr.lookup("PathPaymentOp"), manageOfferOp:xdr.lookup("ManageOfferOp"), createPassiveOfferOp:xdr.lookup("CreatePassiveOfferOp"), setOptionsOp:xdr.lookup("SetOptionsOp"), changeTrustOp:xdr.lookup("ChangeTrustOp"), allowTrustOp:xdr.lookup("AllowTrustOp"), destination:xdr.lookup("AccountId"), manageDataOp:xdr.lookup("ManageDataOp"), bumpSequenceOp:xdr.lookup("BumpSequenceOp")}});xdr.struct("Operation", [["sourceAccount", xdr.option(xdr.lookup("AccountId"))], ["body", xdr.lookup("OperationBody")]]);xdr["enum"]("MemoType", {memoNone:0, memoText:1, memoId:2, memoHash:3, memoReturn:4});xdr.union("Memo", {switchOn:xdr.lookup("MemoType"), switchName:"type", switches:[["memoNone", xdr["void"]()], ["memoText", "text"], ["memoId", "id"], ["memoHash", "hash"], ["memoReturn", "retHash"]], arms:{text:xdr.string(28), id:xdr.lookup("Uint64"), hash:xdr.lookup("Hash"), retHash:xdr.lookup("Hash")}});xdr.struct("TimeBounds", [["minTime", xdr.lookup("Uint64")], ["maxTime", xdr.lookup("Uint64")]]);xdr.union("TransactionExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("Transaction", [["sourceAccount", xdr.lookup("AccountId")], ["fee", xdr.lookup("Uint32")], ["seqNum", xdr.lookup("SequenceNumber")], ["timeBounds", xdr.option(xdr.lookup("TimeBounds"))], ["memo", xdr.lookup("Memo")], ["operations", xdr.varArray(xdr.lookup("Operation"), 100)], ["ext", xdr.lookup("TransactionExt")]]);xdr.union("TransactionSignaturePayloadTaggedTransaction", {switchOn:xdr.lookup("EnvelopeType"), switchName:"type", switches:[["envelopeTypeTx", "tx"]], arms:{tx:xdr.lookup("Transaction")}});xdr.struct("TransactionSignaturePayload", [["networkId", xdr.lookup("Hash")], ["taggedTransaction", xdr.lookup("TransactionSignaturePayloadTaggedTransaction")]]);xdr.struct("TransactionEnvelope", [["tx", xdr.lookup("Transaction")], ["signatures", xdr.varArray(xdr.lookup("DecoratedSignature"), 20)]]);xdr.struct("ClaimOfferAtom", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")], ["assetSold", xdr.lookup("Asset")], ["amountSold", xdr.lookup("Int64")], ["assetBought", xdr.lookup("Asset")], ["amountBought", xdr.lookup("Int64")]]);xdr["enum"]("CreateAccountResultCode", {createAccountSuccess:0, createAccountMalformed:-1, createAccountUnderfunded:-2, createAccountLowReserve:-3, createAccountAlreadyExist:-4});xdr.union("CreateAccountResult", {switchOn:xdr.lookup("CreateAccountResultCode"), switchName:"code", switches:[["createAccountSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("PaymentResultCode", {paymentSuccess:0, paymentMalformed:-1, paymentUnderfunded:-2, paymentSrcNoTrust:-3, paymentSrcNotAuthorized:-4, paymentNoDestination:-5, paymentNoTrust:-6, paymentNotAuthorized:-7, paymentLineFull:-8, paymentNoIssuer:-9});xdr.union("PaymentResult", {switchOn:xdr.lookup("PaymentResultCode"), switchName:"code", switches:[["paymentSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("PathPaymentResultCode", {pathPaymentSuccess:0, pathPaymentMalformed:-1, pathPaymentUnderfunded:-2, pathPaymentSrcNoTrust:-3, pathPaymentSrcNotAuthorized:-4, pathPaymentNoDestination:-5, pathPaymentNoTrust:-6, pathPaymentNotAuthorized:-7, pathPaymentLineFull:-8, pathPaymentNoIssuer:-9, pathPaymentTooFewOffer:-10, pathPaymentOfferCrossSelf:-11, pathPaymentOverSendmax:-12});xdr.struct("SimplePaymentResult", [["destination", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")]]);xdr.struct("PathPaymentResultSuccess", [["offers", xdr.varArray(xdr.lookup("ClaimOfferAtom"), 2147483647)], ["last", xdr.lookup("SimplePaymentResult")]]);xdr.union("PathPaymentResult", {switchOn:xdr.lookup("PathPaymentResultCode"), switchName:"code", switches:[["pathPaymentSuccess", "success"], ["pathPaymentNoIssuer", "noIssuer"]], arms:{success:xdr.lookup("PathPaymentResultSuccess"), noIssuer:xdr.lookup("Asset")}, defaultArm:xdr["void"]()});xdr["enum"]("ManageOfferResultCode", {manageOfferSuccess:0, manageOfferMalformed:-1, manageOfferSellNoTrust:-2, manageOfferBuyNoTrust:-3, manageOfferSellNotAuthorized:-4, manageOfferBuyNotAuthorized:-5, manageOfferLineFull:-6, manageOfferUnderfunded:-7, manageOfferCrossSelf:-8, manageOfferSellNoIssuer:-9, manageOfferBuyNoIssuer:-10, manageOfferNotFound:-11, manageOfferLowReserve:-12});xdr["enum"]("ManageOfferEffect", {manageOfferCreated:0, manageOfferUpdated:1, manageOfferDeleted:2});xdr.union("ManageOfferSuccessResultOffer", {switchOn:xdr.lookup("ManageOfferEffect"), switchName:"effect", switches:[["manageOfferCreated", "offer"], ["manageOfferUpdated", "offer"]], arms:{offer:xdr.lookup("OfferEntry")}, defaultArm:xdr["void"]()});xdr.struct("ManageOfferSuccessResult", [["offersClaimed", xdr.varArray(xdr.lookup("ClaimOfferAtom"), 2147483647)], ["offer", xdr.lookup("ManageOfferSuccessResultOffer")]]);xdr.union("ManageOfferResult", {switchOn:xdr.lookup("ManageOfferResultCode"), switchName:"code", switches:[["manageOfferSuccess", "success"]], arms:{success:xdr.lookup("ManageOfferSuccessResult")}, defaultArm:xdr["void"]()});xdr["enum"]("SetOptionsResultCode", {setOptionsSuccess:0, setOptionsLowReserve:-1, setOptionsTooManySigner:-2, setOptionsBadFlag:-3, setOptionsInvalidInflation:-4, setOptionsCantChange:-5, setOptionsUnknownFlag:-6, setOptionsThresholdOutOfRange:-7, setOptionsBadSigner:-8, setOptionsInvalidHomeDomain:-9});xdr.union("SetOptionsResult", {switchOn:xdr.lookup("SetOptionsResultCode"), switchName:"code", switches:[["setOptionsSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("ChangeTrustResultCode", {changeTrustSuccess:0, changeTrustMalformed:-1, changeTrustNoIssuer:-2, changeTrustInvalidLimit:-3, changeTrustLowReserve:-4, changeTrustSelfNotAllowed:-5});xdr.union("ChangeTrustResult", {switchOn:xdr.lookup("ChangeTrustResultCode"), switchName:"code", switches:[["changeTrustSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("AllowTrustResultCode", {allowTrustSuccess:0, allowTrustMalformed:-1, allowTrustNoTrustLine:-2, allowTrustTrustNotRequired:-3, allowTrustCantRevoke:-4, allowTrustSelfNotAllowed:-5});xdr.union("AllowTrustResult", {switchOn:xdr.lookup("AllowTrustResultCode"), switchName:"code", switches:[["allowTrustSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("AccountMergeResultCode", {accountMergeSuccess:0, accountMergeMalformed:-1, accountMergeNoAccount:-2, accountMergeImmutableSet:-3, accountMergeHasSubEntry:-4, accountMergeSeqnumTooFar:-5, accountMergeDestFull:-6});xdr.union("AccountMergeResult", {switchOn:xdr.lookup("AccountMergeResultCode"), switchName:"code", switches:[["accountMergeSuccess", "sourceAccountBalance"]], arms:{sourceAccountBalance:xdr.lookup("Int64")}, defaultArm:xdr["void"]()});xdr["enum"]("InflationResultCode", {inflationSuccess:0, inflationNotTime:-1});xdr.struct("InflationPayout", [["destination", xdr.lookup("AccountId")], ["amount", xdr.lookup("Int64")]]);xdr.union("InflationResult", {switchOn:xdr.lookup("InflationResultCode"), switchName:"code", switches:[["inflationSuccess", "payouts"]], arms:{payouts:xdr.varArray(xdr.lookup("InflationPayout"), 2147483647)}, defaultArm:xdr["void"]()});xdr["enum"]("ManageDataResultCode", {manageDataSuccess:0, manageDataNotSupportedYet:-1, manageDataNameNotFound:-2, manageDataLowReserve:-3, manageDataInvalidName:-4});xdr.union("ManageDataResult", {switchOn:xdr.lookup("ManageDataResultCode"), switchName:"code", switches:[["manageDataSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("BumpSequenceResultCode", {bumpSequenceSuccess:0, bumpSequenceBadSeq:-1});xdr.union("BumpSequenceResult", {switchOn:xdr.lookup("BumpSequenceResultCode"), switchName:"code", switches:[["bumpSequenceSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("OperationResultCode", {opInner:0, opBadAuth:-1, opNoAccount:-2, opNotSupported:-3});xdr.union("OperationResultTr", {switchOn:xdr.lookup("OperationType"), switchName:"type", switches:[["createAccount", "createAccountResult"], ["payment", "paymentResult"], ["pathPayment", "pathPaymentResult"], ["manageOffer", "manageOfferResult"], ["createPassiveOffer", "createPassiveOfferResult"], ["setOption", "setOptionsResult"], ["changeTrust", "changeTrustResult"], ["allowTrust", "allowTrustResult"], ["accountMerge", "accountMergeResult"], ["inflation", "inflationResult"], ["manageDatum", "manageDataResult"], ["bumpSequence", "bumpSeqResult"]], arms:{createAccountResult:xdr.lookup("CreateAccountResult"), paymentResult:xdr.lookup("PaymentResult"), pathPaymentResult:xdr.lookup("PathPaymentResult"), manageOfferResult:xdr.lookup("ManageOfferResult"), createPassiveOfferResult:xdr.lookup("ManageOfferResult"), setOptionsResult:xdr.lookup("SetOptionsResult"), changeTrustResult:xdr.lookup("ChangeTrustResult"), allowTrustResult:xdr.lookup("AllowTrustResult"), accountMergeResult:xdr.lookup("AccountMergeResult"), inflationResult:xdr.lookup("InflationResult"), manageDataResult:xdr.lookup("ManageDataResult"), bumpSeqResult:xdr.lookup("BumpSequenceResult")}});xdr.union("OperationResult", {switchOn:xdr.lookup("OperationResultCode"), switchName:"code", switches:[["opInner", "tr"]], arms:{tr:xdr.lookup("OperationResultTr")}, defaultArm:xdr["void"]()});xdr["enum"]("TransactionResultCode", {txSuccess:0, txFailed:-1, txTooEarly:-2, txTooLate:-3, txMissingOperation:-4, txBadSeq:-5, txBadAuth:-6, txInsufficientBalance:-7, txNoAccount:-8, txInsufficientFee:-9, txBadAuthExtra:-10, txInternalError:-11});xdr.union("TransactionResultResult", {switchOn:xdr.lookup("TransactionResultCode"), switchName:"code", switches:[["txSuccess", "results"], ["txFailed", "results"]], arms:{results:xdr.varArray(xdr.lookup("OperationResult"), 2147483647)}, defaultArm:xdr["void"]()});xdr.union("TransactionResultExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("TransactionResult", [["feeCharged", xdr.lookup("Int64")], ["result", xdr.lookup("TransactionResultResult")], ["ext", xdr.lookup("TransactionResultExt")]]);xdr.typedef("Hash", xdr.opaque(32));xdr.typedef("Uint256", xdr.opaque(32));xdr.typedef("Uint32", xdr.uint());xdr.typedef("Int32", xdr.int());xdr.typedef("Uint64", xdr.uhyper());xdr.typedef("Int64", xdr.hyper());xdr["enum"]("CryptoKeyType", {keyTypeEd25519:0, keyTypePreAuthTx:1, keyTypeHashX:2});xdr["enum"]("PublicKeyType", {publicKeyTypeEd25519:0});xdr["enum"]("SignerKeyType", {signerKeyTypeEd25519:0, signerKeyTypePreAuthTx:1, signerKeyTypeHashX:2});xdr.union("PublicKey", {switchOn:xdr.lookup("PublicKeyType"), switchName:"type", switches:[["publicKeyTypeEd25519", "ed25519"]], arms:{ed25519:xdr.lookup("Uint256")}});xdr.union("SignerKey", {switchOn:xdr.lookup("SignerKeyType"), switchName:"type", switches:[["signerKeyTypeEd25519", "ed25519"], ["signerKeyTypePreAuthTx", "preAuthTx"], ["signerKeyTypeHashX", "hashX"]], arms:{ed25519:xdr.lookup("Uint256"), preAuthTx:xdr.lookup("Uint256"), hashX:xdr.lookup("Uint256")}});xdr.typedef("Signature", xdr.varOpaque(64));xdr.typedef("SignatureHint", xdr.opaque(4));xdr.typedef("NodeId", xdr.lookup("PublicKey"));xdr.struct("Curve25519Secret", [["key", xdr.opaque(32)]]);xdr.struct("Curve25519Public", [["key", xdr.opaque(32)]]);xdr.struct("HmacSha256Key", [["key", xdr.opaque(32)]]);xdr.struct("HmacSha256Mac", [["mac", xdr.opaque(32)]]);});module.exports = types;
+	"use strict";var _interopRequireWildcard=function(obj){return obj && obj.__esModule?obj:{"default":obj};};var XDR=_interopRequireWildcard(__webpack_require__(205));var types=XDR.config(function(xdr){xdr.typedef("Value", xdr.varOpaque());xdr.struct("ScpBallot", [["counter", xdr.lookup("Uint32")], ["value", xdr.lookup("Value")]]);xdr["enum"]("ScpStatementType", {scpStPrepare:0, scpStConfirm:1, scpStExternalize:2, scpStNominate:3});xdr.struct("ScpNomination", [["quorumSetHash", xdr.lookup("Hash")], ["votes", xdr.varArray(xdr.lookup("Value"), 2147483647)], ["accepted", xdr.varArray(xdr.lookup("Value"), 2147483647)]]);xdr.struct("ScpStatementPrepare", [["quorumSetHash", xdr.lookup("Hash")], ["ballot", xdr.lookup("ScpBallot")], ["prepared", xdr.option(xdr.lookup("ScpBallot"))], ["preparedPrime", xdr.option(xdr.lookup("ScpBallot"))], ["nC", xdr.lookup("Uint32")], ["nH", xdr.lookup("Uint32")]]);xdr.struct("ScpStatementConfirm", [["ballot", xdr.lookup("ScpBallot")], ["nPrepared", xdr.lookup("Uint32")], ["nCommit", xdr.lookup("Uint32")], ["nH", xdr.lookup("Uint32")], ["quorumSetHash", xdr.lookup("Hash")]]);xdr.struct("ScpStatementExternalize", [["commit", xdr.lookup("ScpBallot")], ["nH", xdr.lookup("Uint32")], ["commitQuorumSetHash", xdr.lookup("Hash")]]);xdr.union("ScpStatementPledges", {switchOn:xdr.lookup("ScpStatementType"), switchName:"type", switches:[["scpStPrepare", "prepare"], ["scpStConfirm", "confirm"], ["scpStExternalize", "externalize"], ["scpStNominate", "nominate"]], arms:{prepare:xdr.lookup("ScpStatementPrepare"), confirm:xdr.lookup("ScpStatementConfirm"), externalize:xdr.lookup("ScpStatementExternalize"), nominate:xdr.lookup("ScpNomination")}});xdr.struct("ScpStatement", [["nodeId", xdr.lookup("NodeId")], ["slotIndex", xdr.lookup("Uint64")], ["pledges", xdr.lookup("ScpStatementPledges")]]);xdr.struct("ScpEnvelope", [["statement", xdr.lookup("ScpStatement")], ["signature", xdr.lookup("Signature")]]);xdr.struct("ScpQuorumSet", [["threshold", xdr.lookup("Uint32")], ["validators", xdr.varArray(xdr.lookup("PublicKey"), 2147483647)], ["innerSets", xdr.varArray(xdr.lookup("ScpQuorumSet"), 2147483647)]]);xdr.typedef("AccountId", xdr.lookup("PublicKey"));xdr.typedef("Thresholds", xdr.opaque(4));xdr.typedef("String32", xdr.string(32));xdr.typedef("String64", xdr.string(64));xdr.typedef("SequenceNumber", xdr.lookup("Int64"));xdr.typedef("DataValue", xdr.varOpaque(64));xdr["enum"]("AssetType", {assetTypeNative:0, assetTypeCreditAlphanum4:1, assetTypeCreditAlphanum12:2});xdr.struct("AssetAlphaNum4", [["assetCode", xdr.opaque(4)], ["issuer", xdr.lookup("AccountId")]]);xdr.struct("AssetAlphaNum12", [["assetCode", xdr.opaque(12)], ["issuer", xdr.lookup("AccountId")]]);xdr.union("Asset", {switchOn:xdr.lookup("AssetType"), switchName:"type", switches:[["assetTypeNative", xdr["void"]()], ["assetTypeCreditAlphanum4", "alphaNum4"], ["assetTypeCreditAlphanum12", "alphaNum12"]], arms:{alphaNum4:xdr.lookup("AssetAlphaNum4"), alphaNum12:xdr.lookup("AssetAlphaNum12")}});xdr.struct("Price", [["n", xdr.lookup("Int32")], ["d", xdr.lookup("Int32")]]);xdr.struct("Liabilities", [["buying", xdr.lookup("Int64")], ["selling", xdr.lookup("Int64")]]);xdr["enum"]("ThresholdIndices", {thresholdMasterWeight:0, thresholdLow:1, thresholdMed:2, thresholdHigh:3});xdr["enum"]("LedgerEntryType", {account:0, trustline:1, offer:2, datum:3});xdr.struct("Signer", [["key", xdr.lookup("SignerKey")], ["weight", xdr.lookup("Uint32")]]);xdr["enum"]("AccountFlags", {authRequiredFlag:1, authRevocableFlag:2, authImmutableFlag:4});xdr["const"]("MASK_ACCOUNT_FLAGS", 7);xdr.union("AccountEntryV1Ext", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("AccountEntryV1", [["liabilities", xdr.lookup("Liabilities")], ["ext", xdr.lookup("AccountEntryV1Ext")]]);xdr.union("AccountEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()], [1, "v1"]], arms:{v1:xdr.lookup("AccountEntryV1")}});xdr.struct("AccountEntry", [["accountId", xdr.lookup("AccountId")], ["balance", xdr.lookup("Int64")], ["seqNum", xdr.lookup("SequenceNumber")], ["numSubEntries", xdr.lookup("Uint32")], ["inflationDest", xdr.option(xdr.lookup("AccountId"))], ["flags", xdr.lookup("Uint32")], ["homeDomain", xdr.lookup("String32")], ["thresholds", xdr.lookup("Thresholds")], ["signers", xdr.varArray(xdr.lookup("Signer"), 20)], ["ext", xdr.lookup("AccountEntryExt")]]);xdr["enum"]("TrustLineFlags", {authorizedFlag:1});xdr["const"]("MASK_TRUSTLINE_FLAGS", 1);xdr.union("TrustLineEntryV1Ext", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("TrustLineEntryV1", [["liabilities", xdr.lookup("Liabilities")], ["ext", xdr.lookup("TrustLineEntryV1Ext")]]);xdr.union("TrustLineEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()], [1, "v1"]], arms:{v1:xdr.lookup("TrustLineEntryV1")}});xdr.struct("TrustLineEntry", [["accountId", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["balance", xdr.lookup("Int64")], ["limit", xdr.lookup("Int64")], ["flags", xdr.lookup("Uint32")], ["ext", xdr.lookup("TrustLineEntryExt")]]);xdr["enum"]("OfferEntryFlags", {passiveFlag:1});xdr["const"]("MASK_OFFERENTRY_FLAGS", 1);xdr.union("OfferEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("OfferEntry", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")], ["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")], ["flags", xdr.lookup("Uint32")], ["ext", xdr.lookup("OfferEntryExt")]]);xdr.union("DataEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("DataEntry", [["accountId", xdr.lookup("AccountId")], ["dataName", xdr.lookup("String64")], ["dataValue", xdr.lookup("DataValue")], ["ext", xdr.lookup("DataEntryExt")]]);xdr.union("LedgerEntryData", {switchOn:xdr.lookup("LedgerEntryType"), switchName:"type", switches:[["account", "account"], ["trustline", "trustLine"], ["offer", "offer"], ["datum", "data"]], arms:{account:xdr.lookup("AccountEntry"), trustLine:xdr.lookup("TrustLineEntry"), offer:xdr.lookup("OfferEntry"), data:xdr.lookup("DataEntry")}});xdr.union("LedgerEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("LedgerEntry", [["lastModifiedLedgerSeq", xdr.lookup("Uint32")], ["data", xdr.lookup("LedgerEntryData")], ["ext", xdr.lookup("LedgerEntryExt")]]);xdr["enum"]("EnvelopeType", {envelopeTypeScp:1, envelopeTypeTx:2, envelopeTypeAuth:3});xdr.typedef("UpgradeType", xdr.varOpaque(128));xdr.union("FoneroValueExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("FoneroValue", [["txSetHash", xdr.lookup("Hash")], ["closeTime", xdr.lookup("Uint64")], ["upgrades", xdr.varArray(xdr.lookup("UpgradeType"), 6)], ["ext", xdr.lookup("FoneroValueExt")]]);xdr.union("LedgerHeaderExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("LedgerHeader", [["ledgerVersion", xdr.lookup("Uint32")], ["previousLedgerHash", xdr.lookup("Hash")], ["scpValue", xdr.lookup("FoneroValue")], ["txSetResultHash", xdr.lookup("Hash")], ["bucketListHash", xdr.lookup("Hash")], ["ledgerSeq", xdr.lookup("Uint32")], ["totalCoins", xdr.lookup("Int64")], ["feePool", xdr.lookup("Int64")], ["inflationSeq", xdr.lookup("Uint32")], ["idPool", xdr.lookup("Uint64")], ["baseFee", xdr.lookup("Uint32")], ["baseReserve", xdr.lookup("Uint32")], ["maxTxSetSize", xdr.lookup("Uint32")], ["skipList", xdr.array(xdr.lookup("Hash"), 4)], ["ext", xdr.lookup("LedgerHeaderExt")]]);xdr["enum"]("LedgerUpgradeType", {ledgerUpgradeVersion:1, ledgerUpgradeBaseFee:2, ledgerUpgradeMaxTxSetSize:3, ledgerUpgradeBaseReserve:4});xdr.union("LedgerUpgrade", {switchOn:xdr.lookup("LedgerUpgradeType"), switchName:"type", switches:[["ledgerUpgradeVersion", "newLedgerVersion"], ["ledgerUpgradeBaseFee", "newBaseFee"], ["ledgerUpgradeMaxTxSetSize", "newMaxTxSetSize"], ["ledgerUpgradeBaseReserve", "newBaseReserve"]], arms:{newLedgerVersion:xdr.lookup("Uint32"), newBaseFee:xdr.lookup("Uint32"), newMaxTxSetSize:xdr.lookup("Uint32"), newBaseReserve:xdr.lookup("Uint32")}});xdr.struct("LedgerKeyAccount", [["accountId", xdr.lookup("AccountId")]]);xdr.struct("LedgerKeyTrustLine", [["accountId", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")]]);xdr.struct("LedgerKeyOffer", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")]]);xdr.struct("LedgerKeyData", [["accountId", xdr.lookup("AccountId")], ["dataName", xdr.lookup("String64")]]);xdr.union("LedgerKey", {switchOn:xdr.lookup("LedgerEntryType"), switchName:"type", switches:[["account", "account"], ["trustline", "trustLine"], ["offer", "offer"], ["datum", "data"]], arms:{account:xdr.lookup("LedgerKeyAccount"), trustLine:xdr.lookup("LedgerKeyTrustLine"), offer:xdr.lookup("LedgerKeyOffer"), data:xdr.lookup("LedgerKeyData")}});xdr["enum"]("BucketEntryType", {liveentry:0, deadentry:1});xdr.union("BucketEntry", {switchOn:xdr.lookup("BucketEntryType"), switchName:"type", switches:[["liveentry", "liveEntry"], ["deadentry", "deadEntry"]], arms:{liveEntry:xdr.lookup("LedgerEntry"), deadEntry:xdr.lookup("LedgerKey")}});xdr.struct("TransactionSet", [["previousLedgerHash", xdr.lookup("Hash")], ["txes", xdr.varArray(xdr.lookup("TransactionEnvelope"), 2147483647)]]);xdr.struct("TransactionResultPair", [["transactionHash", xdr.lookup("Hash")], ["result", xdr.lookup("TransactionResult")]]);xdr.struct("TransactionResultSet", [["results", xdr.varArray(xdr.lookup("TransactionResultPair"), 2147483647)]]);xdr.union("TransactionHistoryEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("TransactionHistoryEntry", [["ledgerSeq", xdr.lookup("Uint32")], ["txSet", xdr.lookup("TransactionSet")], ["ext", xdr.lookup("TransactionHistoryEntryExt")]]);xdr.union("TransactionHistoryResultEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("TransactionHistoryResultEntry", [["ledgerSeq", xdr.lookup("Uint32")], ["txResultSet", xdr.lookup("TransactionResultSet")], ["ext", xdr.lookup("TransactionHistoryResultEntryExt")]]);xdr.union("LedgerHeaderHistoryEntryExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("LedgerHeaderHistoryEntry", [["hash", xdr.lookup("Hash")], ["header", xdr.lookup("LedgerHeader")], ["ext", xdr.lookup("LedgerHeaderHistoryEntryExt")]]);xdr.struct("LedgerScpMessages", [["ledgerSeq", xdr.lookup("Uint32")], ["messages", xdr.varArray(xdr.lookup("ScpEnvelope"), 2147483647)]]);xdr.struct("ScpHistoryEntryV0", [["quorumSets", xdr.varArray(xdr.lookup("ScpQuorumSet"), 2147483647)], ["ledgerMessages", xdr.lookup("LedgerScpMessages")]]);xdr.union("ScpHistoryEntry", {switchOn:xdr.int(), switchName:"v", switches:[[0, "v0"]], arms:{v0:xdr.lookup("ScpHistoryEntryV0")}});xdr["enum"]("LedgerEntryChangeType", {ledgerEntryCreated:0, ledgerEntryUpdated:1, ledgerEntryRemoved:2, ledgerEntryState:3});xdr.union("LedgerEntryChange", {switchOn:xdr.lookup("LedgerEntryChangeType"), switchName:"type", switches:[["ledgerEntryCreated", "created"], ["ledgerEntryUpdated", "updated"], ["ledgerEntryRemoved", "removed"], ["ledgerEntryState", "state"]], arms:{created:xdr.lookup("LedgerEntry"), updated:xdr.lookup("LedgerEntry"), removed:xdr.lookup("LedgerKey"), state:xdr.lookup("LedgerEntry")}});xdr.typedef("LedgerEntryChanges", xdr.varArray(xdr.lookup("LedgerEntryChange"), 2147483647));xdr.struct("OperationMeta", [["changes", xdr.lookup("LedgerEntryChanges")]]);xdr.struct("TransactionMetaV1", [["txChanges", xdr.lookup("LedgerEntryChanges")], ["operations", xdr.varArray(xdr.lookup("OperationMeta"), 2147483647)]]);xdr.union("TransactionMeta", {switchOn:xdr.int(), switchName:"v", switches:[[0, "operations"], [1, "v1"]], arms:{operations:xdr.varArray(xdr.lookup("OperationMeta"), 2147483647), v1:xdr.lookup("TransactionMetaV1")}});xdr["enum"]("ErrorCode", {errMisc:0, errDatum:1, errConf:2, errAuth:3, errLoad:4});xdr.struct("Error", [["code", xdr.lookup("ErrorCode")], ["msg", xdr.string(100)]]);xdr.struct("AuthCert", [["pubkey", xdr.lookup("Curve25519Public")], ["expiration", xdr.lookup("Uint64")], ["sig", xdr.lookup("Signature")]]);xdr.struct("Hello", [["ledgerVersion", xdr.lookup("Uint32")], ["overlayVersion", xdr.lookup("Uint32")], ["overlayMinVersion", xdr.lookup("Uint32")], ["networkId", xdr.lookup("Hash")], ["versionStr", xdr.string(100)], ["listeningPort", xdr.int()], ["peerId", xdr.lookup("NodeId")], ["cert", xdr.lookup("AuthCert")], ["nonce", xdr.lookup("Uint256")]]);xdr.struct("Auth", [["unused", xdr.int()]]);xdr["enum"]("IpAddrType", {iPv4:0, iPv6:1});xdr.union("PeerAddressIp", {switchOn:xdr.lookup("IpAddrType"), switchName:"type", switches:[["iPv4", "ipv4"], ["iPv6", "ipv6"]], arms:{ipv4:xdr.opaque(4), ipv6:xdr.opaque(16)}});xdr.struct("PeerAddress", [["ip", xdr.lookup("PeerAddressIp")], ["port", xdr.lookup("Uint32")], ["numFailures", xdr.lookup("Uint32")]]);xdr["enum"]("MessageType", {errorMsg:0, auth:2, dontHave:3, getPeer:4, peer:5, getTxSet:6, txSet:7, transaction:8, getScpQuorumset:9, scpQuorumset:10, scpMessage:11, getScpState:12, hello:13});xdr.struct("DontHave", [["type", xdr.lookup("MessageType")], ["reqHash", xdr.lookup("Uint256")]]);xdr.union("FoneroMessage", {switchOn:xdr.lookup("MessageType"), switchName:"type", switches:[["errorMsg", "error"], ["hello", "hello"], ["auth", "auth"], ["dontHave", "dontHave"], ["getPeer", xdr["void"]()], ["peer", "peers"], ["getTxSet", "txSetHash"], ["txSet", "txSet"], ["transaction", "transaction"], ["getScpQuorumset", "qSetHash"], ["scpQuorumset", "qSet"], ["scpMessage", "envelope"], ["getScpState", "getScpLedgerSeq"]], arms:{error:xdr.lookup("Error"), hello:xdr.lookup("Hello"), auth:xdr.lookup("Auth"), dontHave:xdr.lookup("DontHave"), peers:xdr.varArray(xdr.lookup("PeerAddress"), 100), txSetHash:xdr.lookup("Uint256"), txSet:xdr.lookup("TransactionSet"), transaction:xdr.lookup("TransactionEnvelope"), qSetHash:xdr.lookup("Uint256"), qSet:xdr.lookup("ScpQuorumSet"), envelope:xdr.lookup("FoneroMessage"), getScpLedgerSeq:xdr.lookup("Uint32")}});xdr.struct("AuthenticatedMessageV0", [["sequence", xdr.lookup("Uint64")], ["message", xdr.lookup("FoneroMessage")], ["mac", xdr.lookup("HmacSha256Mac")]]);xdr.union("AuthenticatedMessage", {switchOn:xdr.lookup("Uint32"), switchName:"v", switches:[[0, "v0"]], arms:{v0:xdr.lookup("AuthenticatedMessageV0")}});xdr.struct("DecoratedSignature", [["hint", xdr.lookup("SignatureHint")], ["signature", xdr.lookup("Signature")]]);xdr["enum"]("OperationType", {createAccount:0, payment:1, pathPayment:2, manageOffer:3, createPassiveOffer:4, setOption:5, changeTrust:6, allowTrust:7, accountMerge:8, inflation:9, manageDatum:10, bumpSequence:11});xdr.struct("CreateAccountOp", [["destination", xdr.lookup("AccountId")], ["startingBalance", xdr.lookup("Int64")]]);xdr.struct("PaymentOp", [["destination", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")]]);xdr.struct("PathPaymentOp", [["sendAsset", xdr.lookup("Asset")], ["sendMax", xdr.lookup("Int64")], ["destination", xdr.lookup("AccountId")], ["destAsset", xdr.lookup("Asset")], ["destAmount", xdr.lookup("Int64")], ["path", xdr.varArray(xdr.lookup("Asset"), 5)]]);xdr.struct("ManageOfferOp", [["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")], ["offerId", xdr.lookup("Uint64")]]);xdr.struct("CreatePassiveOfferOp", [["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")]]);xdr.struct("SetOptionsOp", [["inflationDest", xdr.option(xdr.lookup("AccountId"))], ["clearFlags", xdr.option(xdr.lookup("Uint32"))], ["setFlags", xdr.option(xdr.lookup("Uint32"))], ["masterWeight", xdr.option(xdr.lookup("Uint32"))], ["lowThreshold", xdr.option(xdr.lookup("Uint32"))], ["medThreshold", xdr.option(xdr.lookup("Uint32"))], ["highThreshold", xdr.option(xdr.lookup("Uint32"))], ["homeDomain", xdr.option(xdr.lookup("String32"))], ["signer", xdr.option(xdr.lookup("Signer"))]]);xdr.struct("ChangeTrustOp", [["line", xdr.lookup("Asset")], ["limit", xdr.lookup("Int64")]]);xdr.union("AllowTrustOpAsset", {switchOn:xdr.lookup("AssetType"), switchName:"type", switches:[["assetTypeCreditAlphanum4", "assetCode4"], ["assetTypeCreditAlphanum12", "assetCode12"]], arms:{assetCode4:xdr.opaque(4), assetCode12:xdr.opaque(12)}});xdr.struct("AllowTrustOp", [["trustor", xdr.lookup("AccountId")], ["asset", xdr.lookup("AllowTrustOpAsset")], ["authorize", xdr.bool()]]);xdr.struct("ManageDataOp", [["dataName", xdr.lookup("String64")], ["dataValue", xdr.option(xdr.lookup("DataValue"))]]);xdr.struct("BumpSequenceOp", [["bumpTo", xdr.lookup("SequenceNumber")]]);xdr.union("OperationBody", {switchOn:xdr.lookup("OperationType"), switchName:"type", switches:[["createAccount", "createAccountOp"], ["payment", "paymentOp"], ["pathPayment", "pathPaymentOp"], ["manageOffer", "manageOfferOp"], ["createPassiveOffer", "createPassiveOfferOp"], ["setOption", "setOptionsOp"], ["changeTrust", "changeTrustOp"], ["allowTrust", "allowTrustOp"], ["accountMerge", "destination"], ["inflation", xdr["void"]()], ["manageDatum", "manageDataOp"], ["bumpSequence", "bumpSequenceOp"]], arms:{createAccountOp:xdr.lookup("CreateAccountOp"), paymentOp:xdr.lookup("PaymentOp"), pathPaymentOp:xdr.lookup("PathPaymentOp"), manageOfferOp:xdr.lookup("ManageOfferOp"), createPassiveOfferOp:xdr.lookup("CreatePassiveOfferOp"), setOptionsOp:xdr.lookup("SetOptionsOp"), changeTrustOp:xdr.lookup("ChangeTrustOp"), allowTrustOp:xdr.lookup("AllowTrustOp"), destination:xdr.lookup("AccountId"), manageDataOp:xdr.lookup("ManageDataOp"), bumpSequenceOp:xdr.lookup("BumpSequenceOp")}});xdr.struct("Operation", [["sourceAccount", xdr.option(xdr.lookup("AccountId"))], ["body", xdr.lookup("OperationBody")]]);xdr["enum"]("MemoType", {memoNone:0, memoText:1, memoId:2, memoHash:3, memoReturn:4});xdr.union("Memo", {switchOn:xdr.lookup("MemoType"), switchName:"type", switches:[["memoNone", xdr["void"]()], ["memoText", "text"], ["memoId", "id"], ["memoHash", "hash"], ["memoReturn", "retHash"]], arms:{text:xdr.string(28), id:xdr.lookup("Uint64"), hash:xdr.lookup("Hash"), retHash:xdr.lookup("Hash")}});xdr.struct("TimeBounds", [["minTime", xdr.lookup("Uint64")], ["maxTime", xdr.lookup("Uint64")]]);xdr.union("TransactionExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("Transaction", [["sourceAccount", xdr.lookup("AccountId")], ["fee", xdr.lookup("Uint32")], ["seqNum", xdr.lookup("SequenceNumber")], ["timeBounds", xdr.option(xdr.lookup("TimeBounds"))], ["memo", xdr.lookup("Memo")], ["operations", xdr.varArray(xdr.lookup("Operation"), 100)], ["ext", xdr.lookup("TransactionExt")]]);xdr.union("TransactionSignaturePayloadTaggedTransaction", {switchOn:xdr.lookup("EnvelopeType"), switchName:"type", switches:[["envelopeTypeTx", "tx"]], arms:{tx:xdr.lookup("Transaction")}});xdr.struct("TransactionSignaturePayload", [["networkId", xdr.lookup("Hash")], ["taggedTransaction", xdr.lookup("TransactionSignaturePayloadTaggedTransaction")]]);xdr.struct("TransactionEnvelope", [["tx", xdr.lookup("Transaction")], ["signatures", xdr.varArray(xdr.lookup("DecoratedSignature"), 20)]]);xdr.struct("ClaimOfferAtom", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")], ["assetSold", xdr.lookup("Asset")], ["amountSold", xdr.lookup("Int64")], ["assetBought", xdr.lookup("Asset")], ["amountBought", xdr.lookup("Int64")]]);xdr["enum"]("CreateAccountResultCode", {createAccountSuccess:0, createAccountMalformed:-1, createAccountUnderfunded:-2, createAccountLowReserve:-3, createAccountAlreadyExist:-4});xdr.union("CreateAccountResult", {switchOn:xdr.lookup("CreateAccountResultCode"), switchName:"code", switches:[["createAccountSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("PaymentResultCode", {paymentSuccess:0, paymentMalformed:-1, paymentUnderfunded:-2, paymentSrcNoTrust:-3, paymentSrcNotAuthorized:-4, paymentNoDestination:-5, paymentNoTrust:-6, paymentNotAuthorized:-7, paymentLineFull:-8, paymentNoIssuer:-9});xdr.union("PaymentResult", {switchOn:xdr.lookup("PaymentResultCode"), switchName:"code", switches:[["paymentSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("PathPaymentResultCode", {pathPaymentSuccess:0, pathPaymentMalformed:-1, pathPaymentUnderfunded:-2, pathPaymentSrcNoTrust:-3, pathPaymentSrcNotAuthorized:-4, pathPaymentNoDestination:-5, pathPaymentNoTrust:-6, pathPaymentNotAuthorized:-7, pathPaymentLineFull:-8, pathPaymentNoIssuer:-9, pathPaymentTooFewOffer:-10, pathPaymentOfferCrossSelf:-11, pathPaymentOverSendmax:-12});xdr.struct("SimplePaymentResult", [["destination", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")]]);xdr.struct("PathPaymentResultSuccess", [["offers", xdr.varArray(xdr.lookup("ClaimOfferAtom"), 2147483647)], ["last", xdr.lookup("SimplePaymentResult")]]);xdr.union("PathPaymentResult", {switchOn:xdr.lookup("PathPaymentResultCode"), switchName:"code", switches:[["pathPaymentSuccess", "success"], ["pathPaymentNoIssuer", "noIssuer"]], arms:{success:xdr.lookup("PathPaymentResultSuccess"), noIssuer:xdr.lookup("Asset")}, defaultArm:xdr["void"]()});xdr["enum"]("ManageOfferResultCode", {manageOfferSuccess:0, manageOfferMalformed:-1, manageOfferSellNoTrust:-2, manageOfferBuyNoTrust:-3, manageOfferSellNotAuthorized:-4, manageOfferBuyNotAuthorized:-5, manageOfferLineFull:-6, manageOfferUnderfunded:-7, manageOfferCrossSelf:-8, manageOfferSellNoIssuer:-9, manageOfferBuyNoIssuer:-10, manageOfferNotFound:-11, manageOfferLowReserve:-12});xdr["enum"]("ManageOfferEffect", {manageOfferCreated:0, manageOfferUpdated:1, manageOfferDeleted:2});xdr.union("ManageOfferSuccessResultOffer", {switchOn:xdr.lookup("ManageOfferEffect"), switchName:"effect", switches:[["manageOfferCreated", "offer"], ["manageOfferUpdated", "offer"]], arms:{offer:xdr.lookup("OfferEntry")}, defaultArm:xdr["void"]()});xdr.struct("ManageOfferSuccessResult", [["offersClaimed", xdr.varArray(xdr.lookup("ClaimOfferAtom"), 2147483647)], ["offer", xdr.lookup("ManageOfferSuccessResultOffer")]]);xdr.union("ManageOfferResult", {switchOn:xdr.lookup("ManageOfferResultCode"), switchName:"code", switches:[["manageOfferSuccess", "success"]], arms:{success:xdr.lookup("ManageOfferSuccessResult")}, defaultArm:xdr["void"]()});xdr["enum"]("SetOptionsResultCode", {setOptionsSuccess:0, setOptionsLowReserve:-1, setOptionsTooManySigner:-2, setOptionsBadFlag:-3, setOptionsInvalidInflation:-4, setOptionsCantChange:-5, setOptionsUnknownFlag:-6, setOptionsThresholdOutOfRange:-7, setOptionsBadSigner:-8, setOptionsInvalidHomeDomain:-9});xdr.union("SetOptionsResult", {switchOn:xdr.lookup("SetOptionsResultCode"), switchName:"code", switches:[["setOptionsSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("ChangeTrustResultCode", {changeTrustSuccess:0, changeTrustMalformed:-1, changeTrustNoIssuer:-2, changeTrustInvalidLimit:-3, changeTrustLowReserve:-4, changeTrustSelfNotAllowed:-5});xdr.union("ChangeTrustResult", {switchOn:xdr.lookup("ChangeTrustResultCode"), switchName:"code", switches:[["changeTrustSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("AllowTrustResultCode", {allowTrustSuccess:0, allowTrustMalformed:-1, allowTrustNoTrustLine:-2, allowTrustTrustNotRequired:-3, allowTrustCantRevoke:-4, allowTrustSelfNotAllowed:-5});xdr.union("AllowTrustResult", {switchOn:xdr.lookup("AllowTrustResultCode"), switchName:"code", switches:[["allowTrustSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("AccountMergeResultCode", {accountMergeSuccess:0, accountMergeMalformed:-1, accountMergeNoAccount:-2, accountMergeImmutableSet:-3, accountMergeHasSubEntry:-4, accountMergeSeqnumTooFar:-5, accountMergeDestFull:-6});xdr.union("AccountMergeResult", {switchOn:xdr.lookup("AccountMergeResultCode"), switchName:"code", switches:[["accountMergeSuccess", "sourceAccountBalance"]], arms:{sourceAccountBalance:xdr.lookup("Int64")}, defaultArm:xdr["void"]()});xdr["enum"]("InflationResultCode", {inflationSuccess:0, inflationNotTime:-1});xdr.struct("InflationPayout", [["destination", xdr.lookup("AccountId")], ["amount", xdr.lookup("Int64")]]);xdr.union("InflationResult", {switchOn:xdr.lookup("InflationResultCode"), switchName:"code", switches:[["inflationSuccess", "payouts"]], arms:{payouts:xdr.varArray(xdr.lookup("InflationPayout"), 2147483647)}, defaultArm:xdr["void"]()});xdr["enum"]("ManageDataResultCode", {manageDataSuccess:0, manageDataNotSupportedYet:-1, manageDataNameNotFound:-2, manageDataLowReserve:-3, manageDataInvalidName:-4});xdr.union("ManageDataResult", {switchOn:xdr.lookup("ManageDataResultCode"), switchName:"code", switches:[["manageDataSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("BumpSequenceResultCode", {bumpSequenceSuccess:0, bumpSequenceBadSeq:-1});xdr.union("BumpSequenceResult", {switchOn:xdr.lookup("BumpSequenceResultCode"), switchName:"code", switches:[["bumpSequenceSuccess", xdr["void"]()]], arms:{}, defaultArm:xdr["void"]()});xdr["enum"]("OperationResultCode", {opInner:0, opBadAuth:-1, opNoAccount:-2, opNotSupported:-3});xdr.union("OperationResultTr", {switchOn:xdr.lookup("OperationType"), switchName:"type", switches:[["createAccount", "createAccountResult"], ["payment", "paymentResult"], ["pathPayment", "pathPaymentResult"], ["manageOffer", "manageOfferResult"], ["createPassiveOffer", "createPassiveOfferResult"], ["setOption", "setOptionsResult"], ["changeTrust", "changeTrustResult"], ["allowTrust", "allowTrustResult"], ["accountMerge", "accountMergeResult"], ["inflation", "inflationResult"], ["manageDatum", "manageDataResult"], ["bumpSequence", "bumpSeqResult"]], arms:{createAccountResult:xdr.lookup("CreateAccountResult"), paymentResult:xdr.lookup("PaymentResult"), pathPaymentResult:xdr.lookup("PathPaymentResult"), manageOfferResult:xdr.lookup("ManageOfferResult"), createPassiveOfferResult:xdr.lookup("ManageOfferResult"), setOptionsResult:xdr.lookup("SetOptionsResult"), changeTrustResult:xdr.lookup("ChangeTrustResult"), allowTrustResult:xdr.lookup("AllowTrustResult"), accountMergeResult:xdr.lookup("AccountMergeResult"), inflationResult:xdr.lookup("InflationResult"), manageDataResult:xdr.lookup("ManageDataResult"), bumpSeqResult:xdr.lookup("BumpSequenceResult")}});xdr.union("OperationResult", {switchOn:xdr.lookup("OperationResultCode"), switchName:"code", switches:[["opInner", "tr"]], arms:{tr:xdr.lookup("OperationResultTr")}, defaultArm:xdr["void"]()});xdr["enum"]("TransactionResultCode", {txSuccess:0, txFailed:-1, txTooEarly:-2, txTooLate:-3, txMissingOperation:-4, txBadSeq:-5, txBadAuth:-6, txInsufficientBalance:-7, txNoAccount:-8, txInsufficientFee:-9, txBadAuthExtra:-10, txInternalError:-11});xdr.union("TransactionResultResult", {switchOn:xdr.lookup("TransactionResultCode"), switchName:"code", switches:[["txSuccess", "results"], ["txFailed", "results"]], arms:{results:xdr.varArray(xdr.lookup("OperationResult"), 2147483647)}, defaultArm:xdr["void"]()});xdr.union("TransactionResultExt", {switchOn:xdr.int(), switchName:"v", switches:[[0, xdr["void"]()]], arms:{}});xdr.struct("TransactionResult", [["feeCharged", xdr.lookup("Int64")], ["result", xdr.lookup("TransactionResultResult")], ["ext", xdr.lookup("TransactionResultExt")]]);xdr.typedef("Hash", xdr.opaque(32));xdr.typedef("Uint256", xdr.opaque(32));xdr.typedef("Uint32", xdr.uint());xdr.typedef("Int32", xdr.int());xdr.typedef("Uint64", xdr.uhyper());xdr.typedef("Int64", xdr.hyper());xdr["enum"]("CryptoKeyType", {keyTypeEd25519:0, keyTypePreAuthTx:1, keyTypeHashX:2});xdr["enum"]("PublicKeyType", {publicKeyTypeEd25519:0});xdr["enum"]("SignerKeyType", {signerKeyTypeEd25519:0, signerKeyTypePreAuthTx:1, signerKeyTypeHashX:2});xdr.union("PublicKey", {switchOn:xdr.lookup("PublicKeyType"), switchName:"type", switches:[["publicKeyTypeEd25519", "ed25519"]], arms:{ed25519:xdr.lookup("Uint256")}});xdr.union("SignerKey", {switchOn:xdr.lookup("SignerKeyType"), switchName:"type", switches:[["signerKeyTypeEd25519", "ed25519"], ["signerKeyTypePreAuthTx", "preAuthTx"], ["signerKeyTypeHashX", "hashX"]], arms:{ed25519:xdr.lookup("Uint256"), preAuthTx:xdr.lookup("Uint256"), hashX:xdr.lookup("Uint256")}});xdr.typedef("Signature", xdr.varOpaque(64));xdr.typedef("SignatureHint", xdr.opaque(4));xdr.typedef("NodeId", xdr.lookup("PublicKey"));xdr.struct("Curve25519Secret", [["key", xdr.opaque(32)]]);xdr.struct("Curve25519Public", [["key", xdr.opaque(32)]]);xdr.struct("HmacSha256Key", [["key", xdr.opaque(32)]]);xdr.struct("HmacSha256Mac", [["mac", xdr.opaque(32)]]);});module.exports = types;
 
 /***/ }),
 /* 205 */
@@ -27117,7 +27116,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	//  This module provides the signing functionality used by the stellar network
+	//  This module provides the signing functionality used by the fonero network
 	//  The code below may look a little strange... this is because we try to provide
 	//  the most efficient signing method possible.  First, we try to load the
 	//  native ed25519 package for node.js environments, and if that fails we
@@ -29881,7 +29880,7 @@
 	      value: function fromPublicKey(publicKey) {
 	        publicKey = StrKey.decodeEd25519PublicKey(publicKey);
 	        if (publicKey.length !== 32) {
-	          throw new Error("Invalid Stellar public key");
+	          throw new Error("Invalid Fonero public key");
 	        }
 	        return new this({ type: "ed25519", publicKey: publicKey });
 	      }
@@ -29922,12 +29921,12 @@
 
 	/**
 	 * Contains passphrases for common networks:
-	 * * `Networks.PUBLIC`: `Public Global Stellar Network ; September 2015`
+	 * * `Networks.PUBLIC`: `Public Global Fonero Network ; September 2015`
 	 * * `Networks.TESTNET`: `Test SDF Network ; September 2015`
 	 * @type {{PUBLIC: string, TESTNET: string}}
 	 */
 	var Networks = {
-		PUBLIC: "Public Global Stellar Network ; September 2015",
+		PUBLIC: "Public Global Fonero Network ; September 2015",
 		TESTNET: "Test SDF Network ; September 2015"
 	};
 
@@ -29936,7 +29935,7 @@
 
 	/**
 	 * The Network class provides helper methods to get the passphrase or id for different
-	 * stellar networks.  It also provides the {@link Network.current} class method that returns the network
+	 * fonero networks.  It also provides the {@link Network.current} class method that returns the network
 	 * that will be used by this process for the purposes of generating signatures.
 	 *
 	 * You should select network your app will use before adding the first signature. You can use the `use`,
@@ -29981,7 +29980,7 @@
 			usePublicNetwork: {
 
 				/**
-	    * Use Stellar Public Network
+	    * Use Fonero Public Network
 	    */
 
 				value: function usePublicNetwork() {
@@ -30259,7 +30258,7 @@
 	    isValidEd25519PublicKey: {
 
 	      /**
-	       * Returns true if the given Stellar public key is a valid ed25519 public key.
+	       * Returns true if the given Fonero public key is a valid ed25519 public key.
 	       * @param {string} publicKey public key to check
 	       * @returns {boolean}
 	       */
@@ -30295,7 +30294,7 @@
 	    isValidEd25519SecretSeed: {
 
 	      /**
-	       * Returns true if the given Stellar secret key is a valid ed25519 secret seed.
+	       * Returns true if the given Fonero secret key is a valid ed25519 secret seed.
 	       * @param {string} seed seed to check
 	       * @returns {boolean}
 	       */
@@ -31378,7 +31377,7 @@
 	      /**
 	       * Returns the "signature base" of this transaction, which is the value
 	       * that, when hashed, should be signed to create a signature that
-	       * validators on the Stellar Network will accept.
+	       * validators on the Fonero Network will accept.
 	       *
 	       * It is composed of a 4 prefix bytes followed by the xdr-encoded form
 	       * of this transaction.
@@ -31467,7 +31466,7 @@
 	 * When set using `{@link Operation.setOptions}` option, requires the issuing account to
 	 * give other accounts permission before they can hold the issuing account’s credit.
 	 * @constant
-	 * @see [Account flags](https://www.stellar.org/developers/guides/concepts/accounts.html#flags)
+	 * @see [Account flags](https://www.fonero.org/developers/guides/concepts/accounts.html#flags)
 	 */
 	var AuthRequiredFlag = 1 << 0;
 	exports.AuthRequiredFlag = AuthRequiredFlag;
@@ -31475,7 +31474,7 @@
 	 * When set using `{@link Operation.setOptions}` option, allows the issuing account to
 	 * revoke its credit held by other accounts.
 	 * @constant
-	 * @see [Account flags](https://www.stellar.org/developers/guides/concepts/accounts.html#flags)
+	 * @see [Account flags](https://www.fonero.org/developers/guides/concepts/accounts.html#flags)
 	 */
 	var AuthRevocableFlag = 1 << 1;
 	exports.AuthRevocableFlag = AuthRevocableFlag;
@@ -31483,13 +31482,13 @@
 	 * When set using `{@link Operation.setOptions}` option, then none of the authorization flags
 	 * can be set and the account can never be deleted.
 	 * @constant
-	 * @see [Account flags](https://www.stellar.org/developers/guides/concepts/accounts.html#flags)
+	 * @see [Account flags](https://www.fonero.org/developers/guides/concepts/accounts.html#flags)
 	 */
 	var AuthImmutableFlag = 1 << 2;
 
 	exports.AuthImmutableFlag = AuthImmutableFlag;
 	/**
-	 * `Operation` class represents [operations](https://www.stellar.org/developers/learn/concepts/operations.html) in Stellar network.
+	 * `Operation` class represents [operations](https://www.fonero.org/developers/learn/concepts/operations.html) in Fonero network.
 	 * Use one of static methods to create operations:
 	 * * `{@link Operation.createAccount}`
 	 * * `{@link Operation.payment}`
@@ -31592,7 +31591,7 @@
 	            result.lowThreshold = attrs.lowThreshold();
 	            result.medThreshold = attrs.medThreshold();
 	            result.highThreshold = attrs.highThreshold();
-	            // home_domain is checked by iscntrl in stellar-core
+	            // home_domain is checked by iscntrl in fonero-core
 	            result.homeDomain = attrs.homeDomain() ? attrs.homeDomain().toString("ascii") : null;
 
 	            if (attrs.signer()) {
@@ -31631,7 +31630,7 @@
 	            break;
 	          case "manageDatum":
 	            result.type = "manageData";
-	            // manage_data.name is checked by iscntrl in stellar-core
+	            // manage_data.name is checked by iscntrl in fonero-core
 	            result.name = attrs.dataName().toString("ascii");
 	            result.value = attrs.dataValue();
 	            break;
@@ -31828,11 +31827,11 @@
 	var trimEnd = _interopRequire(__webpack_require__(355));
 
 	/**
-	 * Asset class represents an asset, either the native asset (`XLM`)
+	 * Asset class represents an asset, either the native asset (`FNO`)
 	 * or an asset code / issuer account ID pair.
 	 *
 	 * An asset code describes an asset code and issuer pair. In the case of the native
-	 * asset XLM, the issuer will be null.
+	 * asset FNO, the issuer will be null.
 	 *
 	 * @constructor
 	 * @param {string} code - The asset code.
@@ -31846,7 +31845,7 @@
 	    if (!/^[a-zA-Z0-9]{1,12}$/.test(code)) {
 	      throw new Error("Asset code is invalid (maximum alphanumeric, 12 characters at max)");
 	    }
-	    if (String(code).toLowerCase() !== "xlm" && !issuer) {
+	    if (String(code).toLowerCase() !== "fno" && !issuer) {
 	      throw new Error("Issuer cannot be null");
 	    }
 	    if (issuer && !StrKey.isValidEd25519PublicKey(issuer)) {
@@ -31923,7 +31922,7 @@
 	       * * `credit_alphanum4`
 	       * * `credit_alphanum12`
 	       *
-	       * @see [Assets concept](https://www.stellar.org/developers/learn/concepts/assets.html)
+	       * @see [Assets concept](https://www.fonero.org/developers/learn/concepts/assets.html)
 	       * @returns {string}
 	       */
 
@@ -31971,7 +31970,7 @@
 	       */
 
 	      value: function native() {
-	        return new Asset("XLM");
+	        return new Asset("FNO");
 	      }
 	    },
 	    fromOperation: {
@@ -35686,8 +35685,8 @@
 	 * @alias Operation.createAccount
 	 * @param {object} opts
 	 * @param {string} opts.destination - Destination account ID to create an account for.
-	 * @param {string} opts.startingBalance - Amount in XLM the account should be funded for. Must be greater
-	 *                                   than the [reserve balance amount](https://www.stellar.org/developers/learn/concepts/fees.html).
+	 * @param {string} opts.startingBalance - Amount in FNO the account should be funded for. Must be greater
+	 *                                   than the [reserve balance amount](https://www.fonero.org/developers/learn/concepts/fees.html).
 	 * @param {string} [opts.source] - The source account for the payment. Defaults to the transaction's source account.
 	 * @returns {xdr.CreateAccountOp}
 	 */
@@ -35952,7 +35951,7 @@
 
 	/**
 	 * Returns a XDR PaymentOp. A "payment" operation send the specified amount to the
-	 * destination account, optionally through a path. XLM payments create the destination
+	 * destination account, optionally through a path. FNO payments create the destination
 	 * account if it does not exist.
 	 * @function
 	 * @alias Operation.pathPayment
@@ -36116,7 +36115,7 @@
 	 * @param {string} [opts.homeDomain] - sets the home domain used for reverse federation lookup.
 	 * @param {string} [opts.source] - The source account (defaults to transaction source).
 	 * @returns {xdr.SetOptionsOp}
-	 * @see [Account flags](https://www.stellar.org/developers/guides/concepts/accounts.html#flags)
+	 * @see [Account flags](https://www.fonero.org/developers/guides/concepts/accounts.html#flags)
 	 */
 	var setOptions = function setOptions(opts) {
 	  var attributes = {};
@@ -36266,7 +36265,7 @@
 	 *
 	 * @param {string} type - `MemoNone`, `MemoID`, `MemoText`, `MemoHash` or `MemoReturn`
 	 * @param {*} value - `string` for `MemoID`, `MemoText`, buffer of hex string for `MemoHash` or `MemoReturn`
-	 * @see [Transactions concept](https://www.stellar.org/developers/learn/concepts/transactions.html)
+	 * @see [Transactions concept](https://www.fonero.org/developers/learn/concepts/transactions.html)
 	 * @class Memo
 	 */
 
@@ -38970,7 +38969,7 @@
 	        destination: destinationB,
 	        amount: "100"
 	        asset: Asset.native()
-	    }) // <- sends 100 XLM to destinationB
+	    }) // <- sends 100 FNO to destinationB
 	 *   .build();
 	 *
 	 * transaction.sign(sourceKeypair);
@@ -39099,10 +39098,10 @@
 	/**
 	 * Create a new Account object.
 	 *
-	 * `Account` represents a single account in Stellar network and its sequence number.
+	 * `Account` represents a single account in Fonero network and its sequence number.
 	 * Account tracks the sequence number as it is used by {@link TransactionBuilder}.
-	 * See [Accounts](https://stellar.org/developers/learn/concepts/accounts.html) for more information about how
-	 * accounts work in Stellar.
+	 * See [Accounts](https://fonero.org/developers/learn/concepts/accounts.html) for more information about how
+	 * accounts work in Fonero.
 	 * @constructor
 	 * @param {string} accountId ID of the account (ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`)
 	 * @param {string} sequence current sequence number of the account
@@ -39126,7 +39125,7 @@
 	    accountId: {
 
 	      /**
-	       * Returns Stellar account ID, ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`
+	       * Returns Fonero account ID, ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`
 	       * @returns {string}
 	       */
 
@@ -39229,7 +39228,7 @@
 	 * Creates a new {@link LedgerCallBuilder} pointed to server defined by serverUrl.
 	 * Do not create this object directly, use {@link Server#ledgers}.
 	 *
-	 * @see [All Ledgers](https://www.stellar.org/developers/horizon/reference/ledgers-all.html)
+	 * @see [All Ledgers](https://www.fonero.org/developers/horizon/reference/ledgers-all.html)
 	 * @constructor
 	 * @class LedgerCallBuilder
 	 * @extends CallBuilder
@@ -39292,7 +39291,7 @@
 	 *
 	 * @class TransactionCallBuilder
 	 * @extends CallBuilder
-	 * @see [All Transactions](https://www.stellar.org/developers/horizon/reference/transactions-all.html)
+	 * @see [All Transactions](https://www.fonero.org/developers/horizon/reference/transactions-all.html)
 	 * @constructor
 	 * @param {string} serverUrl Horizon server URL.
 	 */
@@ -39310,7 +39309,7 @@
 
 	    /**
 	     * The transaction details endpoint provides information on a single transaction. The transaction hash provided in the hash argument specifies which transaction to load.
-	     * @see [Transaction Details](https://www.stellar.org/developers/horizon/reference/transactions-single.html)
+	     * @see [Transaction Details](https://www.fonero.org/developers/horizon/reference/transactions-single.html)
 	     * @param {string} transactionId Transaction ID
 	     * @returns {TransactionCallBuilder}
 	     */
@@ -39325,7 +39324,7 @@
 
 	        /**
 	         * This endpoint represents all transactions that affected a given account.
-	         * @see [Transactions for Account](https://www.stellar.org/developers/horizon/reference/transactions-for-account.html)
+	         * @see [Transactions for Account](https://www.fonero.org/developers/horizon/reference/transactions-for-account.html)
 	         * @param {string} accountId For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
 	         * @returns {TransactionCallBuilder}
 	         */
@@ -39339,7 +39338,7 @@
 
 	        /**
 	         * This endpoint represents all transactions in a given ledger.
-	         * @see [Transactions for Ledger](https://www.stellar.org/developers/horizon/reference/transactions-for-ledger.html)
+	         * @see [Transactions for Ledger](https://www.fonero.org/developers/horizon/reference/transactions-for-ledger.html)
 	         * @param {number|string} sequence Ledger sequence
 	         * @returns {TransactionCallBuilder}
 	         */
@@ -39383,7 +39382,7 @@
 	 * Creates a new {@link OperationCallBuilder} pointed to server defined by serverUrl.
 	 * Do not create this object directly, use {@link Server#operations}.
 	 *
-	 * @see [All Operations](https://www.stellar.org/developers/horizon/reference/operations-all.html)
+	 * @see [All Operations](https://www.fonero.org/developers/horizon/reference/operations-all.html)
 	 * @class OperationCallBuilder
 	 * @constructor
 	 * @extends CallBuilder
@@ -39404,7 +39403,7 @@
 	    /**
 	     * The operation details endpoint provides information on a single operation. The operation ID provided in the id
 	     * argument specifies which operation to load.
-	     * @see [Operation Details](https://www.stellar.org/developers/horizon/reference/operations-single.html)
+	     * @see [Operation Details](https://www.fonero.org/developers/horizon/reference/operations-single.html)
 	     * @param {number} operationId Operation ID
 	     * @returns {OperationCallBuilder}
 	     */
@@ -39419,7 +39418,7 @@
 
 	        /**
 	         * This endpoint represents all operations that were included in valid transactions that affected a particular account.
-	         * @see [Operations for Account](https://www.stellar.org/developers/horizon/reference/operations-for-account.html)
+	         * @see [Operations for Account](https://www.fonero.org/developers/horizon/reference/operations-for-account.html)
 	         * @param {string} accountId For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
 	         * @returns {OperationCallBuilder}
 	         */
@@ -39434,7 +39433,7 @@
 	        /**
 	         * This endpoint returns all operations that occurred in a given ledger.
 	         *
-	         * @see [Operations for Ledger](https://www.stellar.org/developers/horizon/reference/operations-for-ledger.html)
+	         * @see [Operations for Ledger](https://www.fonero.org/developers/horizon/reference/operations-for-ledger.html)
 	         * @param {number|string} sequence Ledger sequence
 	         * @returns {OperationCallBuilder}
 	         */
@@ -39451,7 +39450,7 @@
 
 	        /**
 	         * This endpoint represents all operations that are part of a given transaction.
-	         * @see [Operations for Transaction](https://www.stellar.org/developers/horizon/reference/operations-for-transaction.html)
+	         * @see [Operations for Transaction](https://www.fonero.org/developers/horizon/reference/operations-for-transaction.html)
 	         * @param {string} transactionId Transaction ID
 	         * @returns {OperationCallBuilder}
 	         */
@@ -39494,7 +39493,7 @@
 	 * Creates a new {@link OfferCallBuilder} pointed to server defined by serverUrl.
 	 * Do not create this object directly, use {@link Server#offers}.
 	 *
-	 * @see [Offers for Account](https://www.stellar.org/developers/horizon/reference/offers-for-account.html)
+	 * @see [Offers for Account](https://www.fonero.org/developers/horizon/reference/offers-for-account.html)
 	 * @class OfferCallBuilder
 	 * @constructor
 	 * @extends CallBuilder
@@ -39548,7 +39547,7 @@
 	 * Creates a new {@link OrderbookCallBuilder} pointed to server defined by serverUrl.
 	 *
 	 * Do not create this object directly, use {@link Server#orderbook}.
-	 * @see [Orderbook Details](https://www.stellar.org/developers/horizon/reference/orderbook-details.html)
+	 * @see [Orderbook Details](https://www.fonero.org/developers/horizon/reference/orderbook-details.html)
 	 * @param {string} serverUrl serverUrl Horizon server URL.
 	 * @param {Asset} selling Asset being sold
 	 * @param {Asset} buying Asset being bought
@@ -39610,7 +39609,7 @@
 	 * @class TradesCallBuilder
 	 * @extends CallBuilder
 	 * @constructor
-	 * @see [Trades](https://www.stellar.org/developers/horizon/reference/endpoints/trades.html)
+	 * @see [Trades](https://www.fonero.org/developers/horizon/reference/endpoints/trades.html)
 	 * @param {string} serverUrl serverUrl Horizon server URL.
 	 */
 	var TradesCallBuilder = exports.TradesCallBuilder = function (_CallBuilder) {
@@ -39668,7 +39667,7 @@
 
 	        /**
 	         * Filter trades for a specific account
-	         * @see [Trades for Account](https://www.stellar.org/developers/horizon/reference/trades-for-account.html)
+	         * @see [Trades for Account](https://www.fonero.org/developers/horizon/reference/trades-for-account.html)
 	         * @param {string} accountId For example: `GBYTR4MC5JAX4ALGUBJD7EIKZVM7CUGWKXIUJMRSMK573XH2O7VAK3SR`
 	         * @returns {TradesCallBuilder}
 	         */
@@ -39704,7 +39703,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	/**
-	 * The Stellar Network allows payments to be made across assets through path payments. A path payment specifies a
+	 * The Fonero Network allows payments to be made across assets through path payments. A path payment specifies a
 	 * series of assets to route a payment through, from source asset (the asset debited from the payer) to destination
 	 * asset (the asset credited to the payee).
 	 *
@@ -39719,7 +39718,7 @@
 	 * used to determine if there a given path can satisfy a payment of the desired amount.
 	 *
 	 * Do not create this object directly, use {@link Server#paths}.
-	 * @see [Find Payment Paths](https://www.stellar.org/developers/horizon/reference/path-finding.html)
+	 * @see [Find Payment Paths](https://www.fonero.org/developers/horizon/reference/path-finding.html)
 	 * @extends CallBuilder
 	 * @param {string} serverUrl Horizon server URL.
 	 * @param {string} source The sender's account ID. Any returned path must use a source that the sender can hold.
@@ -39781,7 +39780,7 @@
 	     * Creates a new {@link PaymentCallBuilder} pointed to server defined by serverUrl.
 	     *
 	     * Do not create this object directly, use {@link Server#payments}.
-	     * @see [All Payments](https://www.stellar.org/developers/horizon/reference/payments-all.html)
+	     * @see [All Payments](https://www.fonero.org/developers/horizon/reference/payments-all.html)
 	     * @constructor
 	     * @extends CallBuilder
 	     * @param {string} serverUrl Horizon server URL.
@@ -39797,7 +39796,7 @@
 
 	    /**
 	     * This endpoint responds with a collection of Payment operations where the given account was either the sender or receiver.
-	     * @see [Payments for Account](https://www.stellar.org/developers/horizon/reference/payments-for-account.html)
+	     * @see [Payments for Account](https://www.fonero.org/developers/horizon/reference/payments-for-account.html)
 	     * @param {string} accountId For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
 	     * @returns {PaymentCallBuilder}
 	     */
@@ -39812,7 +39811,7 @@
 
 	        /**
 	         * This endpoint represents all payment operations that are part of a valid transactions in a given ledger.
-	         * @see [Payments for Ledger](https://www.stellar.org/developers/horizon/reference/payments-for-ledger.html)
+	         * @see [Payments for Ledger](https://www.fonero.org/developers/horizon/reference/payments-for-ledger.html)
 	         * @param {number|string} sequence Ledger sequence
 	         * @returns {PaymentCallBuilder}
 	         */
@@ -39829,7 +39828,7 @@
 
 	        /**
 	         * This endpoint represents all payment operations that are part of a given transaction.
-	         * @see [Payments for Transaction](https://www.stellar.org/developers/horizon/reference/payments-for-transaction.html)
+	         * @see [Payments for Transaction](https://www.fonero.org/developers/horizon/reference/payments-for-transaction.html)
 	         * @param {string} transactionId Transaction ID
 	         * @returns {PaymentCallBuilder}
 	         */
@@ -39872,7 +39871,7 @@
 	 *
 	 * @class EffectCallBuilder
 	 * @extends CallBuilder
-	 * @see [All Effects](https://www.stellar.org/developers/horizon/reference/effects-all.html)
+	 * @see [All Effects](https://www.fonero.org/developers/horizon/reference/effects-all.html)
 	 * @constructor
 	 * @param {string} serverUrl Horizon server URL.
 	 */
@@ -39890,7 +39889,7 @@
 
 	    /**
 	     * This endpoint represents all effects that changed a given account. It will return relevant effects from the creation of the account to the current ledger.
-	     * @see [Effects for Account](https://www.stellar.org/developers/horizon/reference/effects-for-account.html)
+	     * @see [Effects for Account](https://www.fonero.org/developers/horizon/reference/effects-for-account.html)
 	     * @param {string} accountId For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
 	     * @returns {EffectCallBuilder}
 	     */
@@ -39907,7 +39906,7 @@
 	         * Effects are the specific ways that the ledger was changed by any operation.
 	         *
 	         * This endpoint represents all effects that occurred in the given ledger.
-	         * @see [Effects for Ledger](https://www.stellar.org/developers/horizon/reference/effects-for-ledger.html)
+	         * @see [Effects for Ledger](https://www.fonero.org/developers/horizon/reference/effects-for-ledger.html)
 	         * @param {number|string} sequence Ledger sequence
 	         * @returns {EffectCallBuilder}
 	         */
@@ -39924,7 +39923,7 @@
 
 	        /**
 	         * This endpoint represents all effects that occurred as a result of a given transaction.
-	         * @see [Effects for Transaction](https://www.stellar.org/developers/horizon/reference/effects-for-transaction.html)
+	         * @see [Effects for Transaction](https://www.fonero.org/developers/horizon/reference/effects-for-transaction.html)
 	         * @param {string} transactionId Transaction ID
 	         * @returns {EffectCallBuilder}
 	         */
@@ -39938,7 +39937,7 @@
 
 	        /**
 	         * This endpoint represents all effects that occurred as a result of a given operation.
-	         * @see [Effects for Operation](https://www.stellar.org/developers/horizon/reference/effects-for-operation.html)
+	         * @see [Effects for Operation](https://www.fonero.org/developers/horizon/reference/effects-for-operation.html)
 	         * @param {number} operationId Operation ID
 	         * @returns {EffectCallBuilder}
 	         */
@@ -40197,11 +40196,11 @@
 
 	var _config = __webpack_require__(3);
 
-	var _stellarBase = __webpack_require__(203);
+	var _foneroBase = __webpack_require__(203);
 
 	var _errors = __webpack_require__(2);
 
-	var _stellar_toml_resolver = __webpack_require__(428);
+	var _fonero_toml_resolver = __webpack_require__(428);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40212,7 +40211,7 @@
 
 	/**
 	 * FederationServer handles a network connection to a
-	 * [federation server](https://www.stellar.org/developers/learn/concepts/federation.html)
+	 * [federation server](https://www.fonero.org/developers/learn/concepts/federation.html)
 	 * instance and exposes an interface for requests to that instance.
 	 * @constructor
 	 * @param {string} serverURL The federation server URL (ex. `https://acme.com/federation`).
@@ -40251,8 +40250,8 @@
 	   * This method is a helper method for handling user inputs that contain `destination` value.
 	   * It accepts two types of values:
 	   *
-	   * * For Stellar address (ex. `bob*stellar.org`) it splits Stellar address and then tries to find information about
-	   * federation server in `stellar.toml` file for a given domain. It returns a `Promise` which resolves if federation
+	   * * For Fonero address (ex. `bob*fonero.org`) it splits Fonero address and then tries to find information about
+	   * federation server in `fonero.toml` file for a given domain. It returns a `Promise` which resolves if federation
 	   * server exists and user has been found and rejects in all other cases.
 	   * * For Account ID (ex. `GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS`) it returns a `Promise` which
 	   * resolves if Account ID is valid and rejects in all other cases. Please note that this method does not check
@@ -40260,7 +40259,7 @@
 	   *
 	   * Example:
 	   * ```js
-	   * StellarSdk.FederationServer.resolve('bob*stellar.org')
+	   * FoneroSdk.FederationServer.resolve('bob*fonero.org')
 	   *  .then(federationRecord => {
 	   *    // {
 	   *    //   account_id: 'GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS',
@@ -40276,9 +40275,9 @@
 	   *
 	   * The Promise will reject in case of any errors.
 	   *
-	   * @see <a href="https://www.stellar.org/developers/learn/concepts/federation.html" target="_blank">Federation doc</a>
-	   * @see <a href="https://www.stellar.org/developers/learn/concepts/stellar-toml.html" target="_blank">Stellar.toml doc</a>
-	   * @param {string} value Stellar Address (ex. `bob*stellar.org`)
+	   * @see <a href="https://www.fonero.org/developers/learn/concepts/federation.html" target="_blank">Federation doc</a>
+	   * @see <a href="https://www.fonero.org/developers/learn/concepts/fonero-toml.html" target="_blank">Fonero.toml doc</a>
+	   * @param {string} value Fonero Address (ex. `bob*fonero.org`)
 	   * @param {object} [opts]
 	   * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments!
 	   * @param {number} [opts.timeout] - Allow a timeout, default: 0. Allows user to avoid nasty lag due to TOML resolve issue.
@@ -40291,15 +40290,15 @@
 
 
 	    /**
-	     * Returns a Promise that resolves to federation record if the user was found for a given Stellar address.
-	     * @see <a href="https://www.stellar.org/developers/learn/concepts/federation.html" target="_blank">Federation doc</a>
-	     * @param {string} address Stellar address (ex. `bob*stellar.org`). If `FederationServer` was instantiated with `domain` param only username (ex. `bob`) can be passed.
+	     * Returns a Promise that resolves to federation record if the user was found for a given Fonero address.
+	     * @see <a href="https://www.fonero.org/developers/learn/concepts/federation.html" target="_blank">Federation doc</a>
+	     * @param {string} address Fonero address (ex. `bob*fonero.org`). If `FederationServer` was instantiated with `domain` param only username (ex. `bob`) can be passed.
 	     * @returns {Promise}
 	     */
 	    value: function resolveAddress(address) {
 	      if (address.indexOf('*') < 0) {
 	        if (!this.domain) {
-	          return Promise.reject(new Error('Unknown domain. Make sure `address` contains a domain (ex. `bob*stellar.org`) or pass `domain` parameter when instantiating the server object.'));
+	          return Promise.reject(new Error('Unknown domain. Make sure `address` contains a domain (ex. `bob*fonero.org`) or pass `domain` parameter when instantiating the server object.'));
 	        }
 	        address = address + '*' + this.domain;
 	      }
@@ -40309,7 +40308,7 @@
 
 	    /**
 	     * Returns a Promise that resolves to federation record if the user was found for a given account ID.
-	     * @see <a href="https://www.stellar.org/developers/learn/concepts/federation.html" target="_blank">Federation doc</a>
+	     * @see <a href="https://www.fonero.org/developers/learn/concepts/federation.html" target="_blank">Federation doc</a>
 	     * @param {string} accountId Account ID (ex. `GBYNR2QJXLBCBTRN44MRORCMI4YO7FZPFBCNOKTOBCAAFC7KC3LNPRYS`)
 	     * @returns {Promise}
 	     */
@@ -40323,7 +40322,7 @@
 
 	    /**
 	     * Returns a Promise that resolves to federation record if the sender of the transaction was found for a given transaction ID.
-	     * @see <a href="https://www.stellar.org/developers/learn/concepts/federation.html" target="_blank">Federation doc</a>
+	     * @see <a href="https://www.fonero.org/developers/learn/concepts/federation.html" target="_blank">Federation doc</a>
 	     * @param {string} transactionId Transaction ID (ex. `3389e9f0f1a65f19736cacf544c2e825313e8447f569233bb8db39aa607c8889`)
 	     * @returns {Promise}
 	     */
@@ -40363,7 +40362,7 @@
 
 	      // Check if `value` is in account ID format
 	      if (value.indexOf('*') < 0) {
-	        if (!_stellarBase.StrKey.isValidEd25519PublicKey(value)) {
+	        if (!_foneroBase.StrKey.isValidEd25519PublicKey(value)) {
 	          return Promise.reject(new Error('Invalid Account ID'));
 	        } else {
 	          return Promise.resolve({ account_id: value });
@@ -40375,7 +40374,7 @@
 	            domain = _addressParts[1];
 
 	        if (addressParts.length != 2 || !domain) {
-	          return Promise.reject(new Error('Invalid Stellar address'));
+	          return Promise.reject(new Error('Invalid Fonero address'));
 	        }
 	        return FederationServer.createForDomain(domain, opts).then(function (federationServer) {
 	          return federationServer.resolveAddress(value);
@@ -40384,18 +40383,18 @@
 	    }
 
 	    /**
-	     * Creates a `FederationServer` instance based on information from [stellar.toml](https://www.stellar.org/developers/learn/concepts/stellar-toml.html) file for a given domain.
-	     * Returns a `Promise` that resolves to a `FederationServer` object. If `stellar.toml` file does not exist for a given domain or it does not contain information about a federation server Promise will reject.
+	     * Creates a `FederationServer` instance based on information from [fonero.toml](https://www.fonero.org/developers/learn/concepts/fonero-toml.html) file for a given domain.
+	     * Returns a `Promise` that resolves to a `FederationServer` object. If `fonero.toml` file does not exist for a given domain or it does not contain information about a federation server Promise will reject.
 	     * ```js
-	     * StellarSdk.FederationServer.createForDomain('acme.com')
+	     * FoneroSdk.FederationServer.createForDomain('acme.com')
 	     *   .then(federationServer => {
 	     *     // federationServer.resolveAddress('bob').then(...)
 	     *   })
 	     *   .catch(error => {
-	     *     // stellar.toml does not exist or it does not contain information about federation server.
+	     *     // fonero.toml does not exist or it does not contain information about federation server.
 	     *   });
 	     * ```
-	     * @see <a href="https://www.stellar.org/developers/learn/concepts/stellar-toml.html" target="_blank">Stellar.toml doc</a>
+	     * @see <a href="https://www.fonero.org/developers/learn/concepts/fonero-toml.html" target="_blank">Fonero.toml doc</a>
 	     * @param {string} domain Domain to get federation server for
 	     * @param {object} [opts]
 	     * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments!
@@ -40408,9 +40407,9 @@
 	    value: function createForDomain(domain) {
 	      var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	      return _stellar_toml_resolver.StellarTomlResolver.resolve(domain, opts).then(function (tomlObject) {
+	      return _fonero_toml_resolver.FoneroTomlResolver.resolve(domain, opts).then(function (tomlObject) {
 	        if (!tomlObject.FEDERATION_SERVER) {
-	          return Promise.reject(new Error('stellar.toml does not contain FEDERATION_SERVER field'));
+	          return Promise.reject(new Error('fonero.toml does not contain FEDERATION_SERVER field'));
 	        }
 	        return new FederationServer(tomlObject.FEDERATION_SERVER, domain, opts);
 	      });
@@ -40429,7 +40428,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.StellarTomlResolver = exports.STELLAR_TOML_MAX_SIZE = undefined;
+	exports.FoneroTomlResolver = exports.FONERO_TOML_MAX_SIZE = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -40447,35 +40446,35 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	// STELLAR_TOML_MAX_SIZE is the maximum size of stellar.toml file
-	var STELLAR_TOML_MAX_SIZE = exports.STELLAR_TOML_MAX_SIZE = 100 * 1024;
+	// FONERO_TOML_MAX_SIZE is the maximum size of fonero.toml file
+	var FONERO_TOML_MAX_SIZE = exports.FONERO_TOML_MAX_SIZE = 100 * 1024;
 
 	/**
-	 * StellarTomlResolver allows resolving `stellar.toml` files.
+	 * FoneroTomlResolver allows resolving `fonero.toml` files.
 	 */
 
-	var StellarTomlResolver = exports.StellarTomlResolver = function () {
-	  function StellarTomlResolver() {
-	    _classCallCheck(this, StellarTomlResolver);
+	var FoneroTomlResolver = exports.FoneroTomlResolver = function () {
+	  function FoneroTomlResolver() {
+	    _classCallCheck(this, FoneroTomlResolver);
 	  }
 
-	  _createClass(StellarTomlResolver, null, [{
+	  _createClass(FoneroTomlResolver, null, [{
 	    key: 'resolve',
 
 	    /**
-	     * Returns a parsed `stellar.toml` file for a given domain.
-	     * Returns a `Promise` that resolves to the parsed stellar.toml object. If `stellar.toml` file does not exist for a given domain or is invalid Promise will reject.
+	     * Returns a parsed `fonero.toml` file for a given domain.
+	     * Returns a `Promise` that resolves to the parsed fonero.toml object. If `fonero.toml` file does not exist for a given domain or is invalid Promise will reject.
 	     * ```js
-	     * StellarSdk.StellarTomlResolver.resolve('acme.com')
-	     *   .then(stellarToml => {
-	     *     // stellarToml in an object representing domain stellar.toml file.
+	     * FoneroSdk.FoneroTomlResolver.resolve('acme.com')
+	     *   .then(foneroToml => {
+	     *     // foneroToml in an object representing domain fonero.toml file.
 	     *   })
 	     *   .catch(error => {
-	     *     // stellar.toml does not exist or is invalid
+	     *     // fonero.toml does not exist or is invalid
 	     *   });
 	     * ```
-	     * @see <a href="https://www.stellar.org/developers/learn/concepts/stellar-toml.html" target="_blank">Stellar.toml doc</a>
-	     * @param {string} domain Domain to get stellar.toml file for
+	     * @see <a href="https://www.fonero.org/developers/learn/concepts/fonero-toml.html" target="_blank">Fonero.toml doc</a>
+	     * @param {string} domain Domain to get fonero.toml file for
 	     * @param {object} [opts]
 	     * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments!
 	     * @param {number} [opts.timeout] - Allow a timeout, default: 0. Allows user to avoid nasty lag due to TOML resolve issue.
@@ -40500,7 +40499,7 @@
 	        protocol = 'http';
 	      }
 
-	      return _axios2.default.get(protocol + '://' + domain + '/.well-known/stellar.toml', { maxContentLength: STELLAR_TOML_MAX_SIZE, timeout: timeout }).then(function (response) {
+	      return _axios2.default.get(protocol + '://' + domain + '/.well-known/fonero.toml', { maxContentLength: FONERO_TOML_MAX_SIZE, timeout: timeout }).then(function (response) {
 	        try {
 	          var tomlObject = _toml2.default.parse(response.data);
 	          return Promise.resolve(tomlObject);
@@ -40509,7 +40508,7 @@
 	        }
 	      }).catch(function (err) {
 	        if (err.message.match(/^maxContentLength size/)) {
-	          throw new Error('stellar.toml file exceeds allowed size of ' + STELLAR_TOML_MAX_SIZE);
+	          throw new Error('fonero.toml file exceeds allowed size of ' + FONERO_TOML_MAX_SIZE);
 	        } else {
 	          throw err;
 	        }
@@ -40517,7 +40516,7 @@
 	    }
 	  }]);
 
-	  return StellarTomlResolver;
+	  return FoneroTomlResolver;
 	}();
 
 /***/ }),
